@@ -1,0 +1,10 @@
+============================================================
+VALIDATION SUMMARY REPORT
+============================================================
+File    : C:/Users/radin/Documents/Adi Heavy/Siraal/excels/demo.xlsx
+Valid   : 18 parts queued for generation
+Errors  : 0
+Warnings: 0
+
+ISSUES DETECTED:
+  ℹ [INFO] GR-SG-003 | GEAR_UNDERCUTTING: Z=16.0 < 17 — standard profile may cause undercutting; consider profile shift

@@ -1,0 +1,4 @@
+Part_Number,Description,Material,Plate_Length,Plate_Width,Thickness,Hole_Diameter,Hole_Count,Revision,Tolerance
+BRK-1001,Heavy Duty Base,Steel-1020,500,300,25,12.5,4,A,+/-0.1mm
+BRK-1002,Motor Mount,Al-6061,450,450,15,10.0,4,B,+/-0.05mm
+BRK-1003,Sensor Bracket,Nylon-66,150,75,5,6.0,4,A,+/-0.5mm
