@@ -1,0 +1,12 @@
+{
+    "rules": [
+        {
+            "rule_id": "EXAMPLE_RULE_01",
+            "target_type": "Spur_Gear_3D",
+            "target_material": "ALL",
+            "condition": "P3 > 200",
+            "severity": "ERROR",
+            "message": "Face width (P3) exceeds maximum 200mm limit for our machines."
+        }
+    ]
+}

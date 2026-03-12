@@ -1,0 +1,109 @@
+{
+  "Part_Name": "Custom_Aerospace_Gear_Blank",
+  "Steps": [
+    {
+      "action": "BASE",
+      "shape": "cylinder",
+      "radius": "P1",
+      "height": "P3",
+      "z": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.8",
+      "height": "P3+10",
+      "z": "-5"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P4",
+      "height": "P3",
+      "z": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P1",
+      "width": "8",
+      "height": "P3",
+      "x": "P1/2",
+      "y": "0",
+      "z": "0",
+      "rotation_z": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P1",
+      "width": "8",
+      "height": "P3",
+      "x": "P1/2",
+      "y": "0",
+      "z": "0",
+      "rotation_z": "60"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P1",
+      "width": "8",
+      "height": "P3",
+      "x": "P1/2",
+      "y": "0",
+      "z": "0",
+      "rotation_z": "120"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P1",
+      "width": "8",
+      "height": "P3",
+      "x": "P1/2",
+      "y": "0",
+      "z": "0",
+      "rotation_z": "180"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P1",
+      "width": "8",
+      "height": "P3",
+      "x": "P1/2",
+      "y": "0",
+      "z": "0",
+      "rotation_z": "240"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P1",
+      "width": "8",
+      "height": "P3",
+      "x": "P1/2",
+      "y": "0",
+      "z": "0",
+      "rotation_z": "300"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "15",
+      "height": "P3+10",
+      "z": "-5"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "box",
+      "length": "5",
+      "width": "5",
+      "height": "P3+10",
+      "x": "17.5",
+      "y": "0",
+      "z": "-5"
+    }
+  ]
+}

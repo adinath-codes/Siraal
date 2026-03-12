@@ -1,0 +1,68 @@
+{
+  "Part_Name": "Custom_Aero_Hub_Plate",
+  "Steps": [
+    {
+      "action": "BASE",
+      "shape": "cylinder",
+      "radius": "P1",
+      "height": "P3",
+      "x": "0",
+      "y": "0",
+      "z": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P2",
+      "height": "P3*2",
+      "x": "0",
+      "y": "0",
+      "z": "P3"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P4/2",
+      "height": "P3*3 + 10",
+      "x": "0",
+      "y": "0",
+      "z": "-5"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "5",
+      "height": "P3 + 10",
+      "x": "0",
+      "y": "P1*0.75",
+      "z": "-5"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "5",
+      "height": "P3 + 10",
+      "x": "0",
+      "y": "-P1*0.75",
+      "z": "-5"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "5",
+      "height": "P3 + 10",
+      "x": "P1*0.75",
+      "y": "0",
+      "z": "-5"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "5",
+      "height": "P3 + 10",
+      "x": "-P1*0.75",
+      "y": "0",
+      "z": "-5"
+    }
+  ]
+}
