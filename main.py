@@ -123,14 +123,11 @@ class SiraalHub(ctk.CTk):
                 json.dump(default_rules, f, indent=4)
 
     def _launch_rules(self):
-        """Opens the JSON rulebook in the system's default text editor."""
-        try:
-            # This automatically opens the file in VS Code or Notepad on Windows
-            os.startfile("custom_rules.json")
-        except AttributeError:
-            # Fallback for Mac/Linux if needed later
-            subprocess.call(['open', 'custom_rules.json'])
-
+        """Launches the Rules Editor GUI as an independent process."""
+        if not os.path.exists("gui_launcher_val.py"):
+            messagebox.showerror("Error", "gui_launcher_val.py not found in directory.")
+            return
+        subprocess.Popen([sys.executable, "gui_launcher_val.py"])
 if __name__ == "__main__":
     app = SiraalHub()
     app.mainloop()

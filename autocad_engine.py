@@ -1,7 +1,7 @@
 """
 autocad_engine.py — Siraal Grand Unified Manufacturing Engine
 Advanced AutoCAD COM controller: Plate, Spur_Gear, Stepped_Shaft, Flanged_Shaft, Ring_Gear
-ISO title block • Auto-dimensioning • DXF/DWG export • Live market pricing
+ISO title block • Auto-dimensioning • Isolated DXF/DWG export • Live market pricing
 """
 
 import win32com.client
@@ -58,12 +58,11 @@ class AutoCADController:
         self.acad = win32com.client.dynamic.Dispatch("AutoCAD.Application")
         self.acad.Visible = True
 
-        self.doc = self.acad.Documents.Add()
-        self.ms = win32com.client.dynamic.Dispatch(self.doc.ModelSpace)
-        self._log("[*] Fresh Master AutoCAD document created.")
-
-        self._setup_document_env(self.doc)
+        # Keep one background document open so AutoCAD doesn't quit
+        self.base_doc = self.acad.Documents.Add()
+        
         self._update_live_prices()
+
     def _setup_document_env(self, doc):
         """Applies ISO dimension styles, linetypes, and layers to a specific document."""
         doc.SetVariable("LWDISPLAY", 1)
@@ -343,181 +342,117 @@ class AutoCADController:
         self._rect(ox+8, oy+8, w-16, h-16, "05_Title_Block")
         self._text(pno, ox+14, oy+h-22, 7, "05_Title_Block")
 
-# ── Strict Isolated DXF Export ───────────────────────────────────────────
-# ── Strict Isolated DXF Export (Stabilized) ──────────────────────────────
-    def _export_all_dxf(self, parts: List[dict]):
-        # Use the session name provided by the GUI
-        out_dir = os.path.join(os.getcwd(), "CNC_Machine_Files", self.session_name)
-        os.makedirs(out_dir, exist_ok=True)
-        
-        self._log_info(f"\n[*] Exporting {len(parts)} strictly isolated CNC DXF files to '{out_dir}'...")
-
-        for part in parts:
-            pno   = part.get("Part_Number", "UNK")
-            ptype = str(part.get("Part_Type", "Plate")).strip()
-            p1, p2, p3, p4 = (float(part.get(f"Param_{i}", 100)) for i in range(1, 5))
-
-            # Backup context BEFORE attempting anything
-            orig_ms, orig_doc = self.ms, self.doc
-            tmp_doc = None
-
-            try:
-                # 1. Create a brand new document
-                tmp_doc = self.acad.Documents.Add()
-                
-                # STABILIZER 1: Let AutoCAD catch its breath and initialize the document
-                time.sleep(0.5) 
-                
-                # STABILIZER 2: Explicitly force AutoCAD focus to the new document
-                tmp_doc.Activate() 
-                time.sleep(0.2)
-
-                tmp_ms  = win32com.client.dynamic.Dispatch(tmp_doc.ModelSpace)
-                
-                # 2. Swap the drawing context FIRST
-                self.ms, self.doc = tmp_ms, tmp_doc
-
-                # 3. Inject identical layers/dims
-                self._setup_document_env(tmp_doc)
-
-                # 4. Draw geometry precisely at origin (0,0)
-                geo_w, geo_h = self._bbox(ptype, p1, p2, p3, p4)
-                cx, cy = geo_w / 2.0, geo_h / 2.0
-
-                if ptype == "Plate":           self._draw_plate(0, 0, p1, p2, p4)
-                elif ptype == "Spur_Gear":     self._draw_spur_gear(cx, cy, p1, p2, p4)
-                elif ptype == "Ring_Gear":     self._draw_ring_gear(cx, cy, p1, p2, p4)
-                elif ptype == "Stepped_Shaft": self._draw_stepped_shaft(0, cy, p1, p2, p3, p4)
-                elif ptype == "Flanged_Shaft": self._draw_flanged_shaft(0, cy, p1, p2, p3, p4)
-
-                # Frame the view perfectly for the CNC export
-                self.acad.ZoomExtents()
-
-                # 5. Export clean DXF
-                path = os.path.abspath(os.path.join(out_dir, f"{pno}_CNC.dxf"))
-                if os.path.exists(path):
-                    try:
-                        os.remove(path)
-                    except: pass # File might be locked by OS
-                
-                tmp_doc.SaveAs(path, DXF_FORMAT)
-                self._log_info(f"    ✔ {pno}_CNC.dxf")
-                
-                # STABILIZER 3: Give the hard drive time to finish writing the DXF file
-                time.sleep(0.5) 
-
-            except Exception as e:
-                self._log_info(f"    ✘ DXF failed for {pno}: {e}")
-
-            finally:
-                # 6. Safely restore Master Document context (ALWAYS runs, even on crash)
-                self.ms, self.doc = orig_ms, orig_doc
-                
-                # Shift AutoCAD's focus back to the master assembly
-                if orig_doc:
-                    try:
-                        orig_doc.Activate()
-                    except: pass
-                
-                # Close the temp document without saving DWG changes
-                if tmp_doc:
-                    try:
-                        tmp_doc.Close(False)
-                    except Exception: pass
-                
-                # STABILIZER 4: Breather before generating the next document
-                time.sleep(0.3)
     def _save_dwg(self, path: str):
         abs_path = os.path.abspath(path)
         os.makedirs(os.path.dirname(abs_path), exist_ok=True)
         for fmt in DWG_SAVE_FORMATS:
             try:
                 self.doc.SaveAs(abs_path, fmt)
-                self._log_info(f"[+] Saved DWG (fmt={fmt}): {abs_path}")
+                self._log_info(f"    [+] Saved DWG: {os.path.basename(abs_path)}")
                 return
             except Exception:
                 continue
         self.doc.SaveAs(abs_path)
 
     
-    # ── Master Batch Generator ────────────────────────────────────────────────
+    # ── ISOLATED Batch Generator (1 File per Part) ────────────────────────────
     def generate_batch(self, parts: List[dict], status_callback: Optional[Callable] = None):
-        TB_H, PAD, GAP_TB, BORD, PART_GAP = 55.0, 20.0, 8.0, 10.0, 60.0
-        current_x = 0.0
-        failed = []
+        
+        # 1. Ensure Output Directory structure exists: output_2D/Session_Name/
+        out_dir = os.path.join(os.getcwd(), "output_2D", self.session_name)
+        os.makedirs(out_dir, exist_ok=True)
+        self._log_info(f"\n[*] Starting Batch Generation: {len(parts)} parts -> {out_dir}")
+
+        TB_H, PAD, GAP_TB, BORD = 55.0, 20.0, 8.0, 10.0
 
         for i, part in enumerate(parts):
             pno   = part.get("Part_Number", "UNK")
             ptype = str(part.get("Part_Type", "Plate")).strip()
             mat   = part.get("Material", "Steel-1020")
-            p1, p2, p3, p4 = (float(part.get(f"Param_{i}", 100)) for i in range(1, 5))
+            p1, p2, p3, p4 = (float(part.get(f"Param_{j}", 100)) for j in range(1, 5))
 
             self._log_info(f"\n[*] GENERATING: {pno} | {ptype} | {mat}")
-            
-            # Trigger the Tkinter UI to say "Drawing..."
             if status_callback:
                 status_callback(pno, "⚙ Drawing…", i / len(parts))
 
             try:
+                # 2. CREATE AN ISOLATED DOCUMENT JUST FOR THIS PART
+                self.doc = self.acad.Documents.Add()
+                self.ms = win32com.client.dynamic.Dispatch(self.doc.ModelSpace)
+                
+                # Let AutoCAD initialize the tab fully
+                time.sleep(0.2)
+                self.doc.Activate()
+                
+                self._setup_document_env(self.doc)
+
                 vol, mass, cost = self._calc_specs(ptype, p1, p2, p3, p4, mat)
-                self._log_info(f"    ERP → Mass: {mass} kg | Cost: Rs.{cost:,.2f} | Vol: {vol:.2f} cm3")
+                self._log_info(f"    ERP → Mass: {mass} kg | Cost: Rs.{cost:,.2f}")
 
                 geo_w, geo_h = self._bbox(ptype, p1, p2, p3, p4)
                 frame_w = geo_w + PAD*2 + BORD*2
                 frame_h = geo_h + PAD*2 + BORD*2 + GAP_TB + TB_H
 
-                gc_ox, gc_oy = current_x + BORD + PAD, BORD + TB_H + GAP_TB + PAD
-                tb_ox, tb_oy, tb_w = current_x + BORD, BORD, frame_w - BORD*2
+                # Origin is always 0,0 since each file has only one part
+                gc_ox, gc_oy = BORD + PAD, BORD + TB_H + GAP_TB + PAD
+                tb_ox, tb_oy, tb_w = BORD, BORD, frame_w - BORD*2
 
-                self._draw_border(current_x, 0, frame_w, frame_h, pno)
+                self._draw_border(0, 0, frame_w, frame_h, pno)
 
                 if ptype == "Plate":
                     ox, oy = gc_ox + (geo_w - p1) / 2.0, gc_oy + (geo_h - p2) / 2.0
-                    self._log_info("    -> Plate with corner holes...")
                     self._draw_plate(ox, oy, p1, p2, p4)
 
                 elif ptype == "Spur_Gear":
                     cx, cy = gc_ox + geo_w/2.0, gc_oy + geo_h/2.0
-                    self._log_info("    -> Involute spur gear...")
                     self._draw_spur_gear(cx, cy, p1, p2, p4)
 
                 elif ptype == "Ring_Gear":
                     cx, cy = gc_ox + geo_w/2.0, gc_oy + geo_h/2.0
-                    self._log_info("    -> Ring gear...")
                     self._draw_ring_gear(cx, cy, p1, p2, p4)
 
                 elif ptype == "Stepped_Shaft":
                     ox, cy = gc_ox + (geo_w - (p1 + p3)) / 2.0, gc_oy + geo_h / 2.0
-                    self._log_info("    -> Stepped shaft...")
                     self._draw_stepped_shaft(ox, cy, p1, p2, p3, p4)
 
                 elif ptype == "Flanged_Shaft":
                     ox, cy = gc_ox + (geo_w - (p1 + p4)) / 2.0, gc_oy + geo_h / 2.0
-                    self._log_info("    -> Flanged shaft...")
                     self._draw_flanged_shaft(ox, cy, p1, p2, p3, p4)
 
                 self._draw_title_block(tb_ox, tb_oy, tb_w, part, mass, cost, vol)
 
-                # ADVANCE THE X-AXIS FOR THE NEXT PART
-                current_x += frame_w + PART_GAP
-                time.sleep(0.05)
+                self.acad.ZoomExtents()
                 
-                # Trigger the Tkinter UI to say "Done"
+                # 3. SAVE ISOLATED FILES
+                dwg_path = os.path.join(out_dir, f"{pno}.dwg")
+                dxf_path = os.path.join(out_dir, f"{pno}.dxf")
+                
+                # Delete any old existing files to prevent AutoCAD SaveAs pop-up prompts blocking execution
+                if os.path.exists(dwg_path): os.remove(dwg_path)
+                if os.path.exists(dxf_path): os.remove(dxf_path)
+                
+                self._save_dwg(dwg_path)
+                
+                # Also save a raw DXF for Laser/Plasma cutters
+                try:
+                    self.doc.SaveAs(os.path.abspath(dxf_path), DXF_FORMAT)
+                    self._log_info(f"    [+] Saved DXF: {os.path.basename(dxf_path)}")
+                except Exception as dxf_err:
+                    self._log_info(f"    [!] DXF save failed: {dxf_err}")
+
                 if status_callback:
                     status_callback(pno, "✔ Done", None)
-
+                    
             except Exception as e:
                 self._log_info(f"  ERROR drafting {pno}: {e}")
-                failed.append(pno)
                 if status_callback:
                     status_callback(pno, "✘ Error", None)
+            finally:
+                # 4. CLOSE DOCUMENT (Prevents memory leaks and AutoCAD crashing from 100+ open tabs)
+                try:
+                    self.doc.Close(False)
+                except Exception:
+                    pass
+                time.sleep(0.2)
 
-        self.acad.ZoomExtents()
-        
-        # Save Master Assembly into the Session Folder
-        master_out_dir = os.path.join(os.getcwd(), "CNC_Machine_Files", self.session_name)
-        os.makedirs(master_out_dir, exist_ok=True)
-        master_path = os.path.join(master_out_dir, "Master_Assembly.dwg")
-        
-        self._save_dwg(master_path)
-        self._log_info(f"\n[+] Master DWG saved in session folder: {master_path}")
+        self._log_info(f"\n[+] Batch Complete! All isolated files generated in: {out_dir}")

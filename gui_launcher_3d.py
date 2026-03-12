@@ -1,13 +1,11 @@
 """
-gui_launcher_3d.py  —  Siraal Manufacturing Engine  v5.0
+gui_launcher_3d.py  —  Siraal Manufacturing Engine  v6.0
 ======================================================
-Professional 4-Tab GUI (Integrated with robust Validator3D):
-  Tab 1 — EXCEL MODE      : Load BOM xlsx → Validate → Run 3D batch
-  Tab 2 — MANUAL MODE     : Type gear specs → Auto-builds Excel → Runs batch
+Professional 4-Tab GUI (Integrated with robust Validator3D & Cost Engine):
+  Tab 1 — EXCEL MODE      : Load BOM xlsx → Validate → Run 3D batch → Cost PDF
+  Tab 2 — MANUAL MODE     : Type gear specs → Auto-builds Excel → Runs batch → Cost PDF
   Tab 3 — AI SHAPE CREATOR: Text-to-CAD → Gemini API → CSG JSON Template → 3D Preview
   Tab 4 — AI BOM COPILOT  : Generative AI for editing mass Excel BOMs
-
-  + Realtime Excel Checker (watchdog) with live diff panel
 """
 
 import customtkinter as ctk
@@ -254,6 +252,7 @@ def _log_widget(parent):
     txt.tag_config("info",  foreground="#60A5FA")
     txt.tag_config("head",  foreground=C["gold"])
     txt.tag_config("ai",    foreground="#C084FC")
+    txt.tag_config("cost",  foreground="#A78BFA") # Violet for cost engine
     return fr, txt
 
 def _append_log(txt_widget, msg, tag=""):
@@ -266,6 +265,7 @@ def _append_log(txt_widget, msg, tag=""):
         elif any(x in msg for x in ("✘","ERROR","error","fail","FAIL")):    tag="err"
         elif any(x in msg for x in ("SYSTEM","BOM","LOADING","SAVING")):    tag="info"
         elif any(x in msg for x in ("AI","Gemini","Designing","model")):    tag="ai"
+        elif any(x in msg for x in ("PDF","Economic","ESG","Cost")):        tag="cost"
         elif msg.startswith("╔") or msg.startswith("║") or msg.startswith("╚"): tag="head"
     txt_widget.insert("end", line, tag or "")
     txt_widget.see("end")
@@ -375,7 +375,7 @@ class GearRow(ctk.CTkFrame):
         except Exception: self._warn_lbl.configure(text="")
 
     def get_part(self):
-        return {"Part_Number": self.v_pno.get(), "Part_Type": self.v_type.get(), "Material": self.v_mat.get(), "Param_1": self.v_z.get(), "Param_2": self.v_m.get(), "Param_3": self.v_fw.get(), "Param_4": self.v_bd.get(), "Quantity": self.v_qty.get(), "Priority": self.v_prio.get(), "Description": self.v_desc.get(), "Enabled": "YES"}
+        return {"Part_Number": self.v_pno.get(), "Part_Type": self.v_type.get(), "Material": self.v_mat.get(), "Param_1": self.v_z.get(), "Param_2": self.v_m.get(), "Param_3": self.v_fw.get(), "Param_4": self.v_bd.get(), "Qty": self.v_qty.get(), "Priority": self.v_prio.get(), "Description": self.v_desc.get(), "Enabled": "YES"}
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # MAIN WINDOW
@@ -412,6 +412,30 @@ class SiraalGUI(ctk.CTk):
         # Tab listener
         self._tabs.configure(command=self._on_tab_change)
 
+    # ─────────────────────────────────────────────────────────────────────────
+    # MISSING UI HELPER METHODS ADDED HERE
+    # ─────────────────────────────────────────────────────────────────────────
+    def _update_tbl(self, widget, parts, states):
+        widget.configure(state="normal")
+        widget.delete("1.0", "end")
+        widget.insert("end", f"{'PART NUMBER':<24} {'TYPE':<18} {'STATUS'}\n", "head")
+        widget.insert("end", "-"*60 + "\n", "head")
+        for p in parts:
+            pno = p.get("Part_Number", "")
+            pt = p.get("Part_Type", "")
+            st = states.get(pno, "⏳ Queued")
+            line = f"{pno:<24} {pt:<18} {st}\n"
+            if "✔" in st: widget.insert("end", line, "ok")
+            elif "✘" in st: widget.insert("end", line, "err")
+            elif "⚙" in st: widget.insert("end", line, "warn")
+            else: widget.insert("end", line)
+        widget.configure(state="disabled")
+
+    def _clear_log(self, widget):
+        widget.configure(state="normal")
+        widget.delete("1.0", "end")
+        widget.configure(state="disabled")
+
     def _on_tab_change(self):
         if "MANUAL MODE" in self._tabs.get():
             self._refresh_custom_buttons()
@@ -436,9 +460,14 @@ class SiraalGUI(ctk.CTk):
         logo_fr.pack(side="left", padx=(18,0), pady=8)
         ctk.CTkLabel(logo_fr, text="⚙", font=ctk.CTkFont("Segoe UI", 22), text_color=C["gold"]).pack(side="left", padx=(0,6))
         ctk.CTkLabel(logo_fr, text="SIRAAL  MANUFACTURING  ENGINE", font=ctk.CTkFont("Segoe UI", 15, "bold"), text_color=C["text"]).pack(side="left")
-        ctk.CTkLabel(logo_fr, text=" v5.0", font=ctk.CTkFont("Segoe UI", 10), text_color=C["text3"]).pack(side="left", pady=(4,0))
+        ctk.CTkLabel(logo_fr, text=" v6.0", font=ctk.CTkFont("Segoe UI", 10), text_color=C["text3"]).pack(side="left", pady=(4,0))
         meta = ctk.CTkFrame(hdr, fg_color="transparent")
         meta.pack(side="right", padx=18)
+        
+        # --- NEW GLOBAL COST REPORT BUTTON ---
+        self._btn_global_cost = ctk.CTkButton(meta, text="📊 ESG & COST REPORT", fg_color=C["violet"], hover_color="#6D48C4", text_color=C["void"], font=ctk.CTkFont("Segoe UI", 10, "bold"), height=26, command=self._run_global_cost)
+        self._btn_global_cost.pack(side="left", padx=(0, 15))
+        
         for badge, col in [("IS 2535/ISO 1328", C["teal"]), ("1st Angle", C["gold"]), ("TN-IMPACT 2026", C["amber"])]:
             ctk.CTkLabel(meta, text=badge, font=ctk.CTkFont("Segoe UI",8,"bold"), text_color=col, fg_color=_badge_bg(col), corner_radius=4, padx=6, pady=2).pack(side="left", padx=3)
         ctk.CTkFrame(self, fg_color=C["border"], height=1, corner_radius=0).pack(fill="x")
@@ -536,9 +565,20 @@ class SiraalGUI(ctk.CTk):
     def _on_excel_change(self, diffs):
         preview = " │ ".join(diffs[:3])
         if len(diffs) > 3: preview += f"  +{len(diffs)-3} more"
-        self._watch_diff_lbl.configure(text=f"⚡ {datetime.datetime.now().strftime('%H:%M:%S')}  {preview}", text_color=C["gold"])
-        for log in (self._log1_txt, self._log2_txt, self._log3_txt, self._log4_txt):
-            _append_log(log, f"⚡ Excel changed: {preview}", "warn")
+        
+        # We must route the UI updates back to the main thread via self.after
+        def _update_ui():
+            self._watch_diff_lbl.configure(text=f"⚡ {datetime.datetime.now().strftime('%H:%M:%S')}  {preview}", text_color=C["gold"])
+            for log in (self._log1_txt, self._log2_txt, self._log3_txt, self._log4_txt):
+                _append_log(log, f"⚡ Excel changed: {preview}", "warn")
+            
+            # Show the alert pop-up directly on the main thread
+            messagebox.showinfo(
+                "Watched BOM Modified", 
+                "The watched Excel file has been modified externally.\n\nPlease Re-Run the validation and generation engine to apply these changes."
+            )
+            
+        self.after(0, _update_ui)
 
     # ═════════════════════════════════════════════════════════════════════════
     # TAB 1 — EXCEL MODE
@@ -580,6 +620,7 @@ class SiraalGUI(ctk.CTk):
 
         _divider(p, "ACTIONS", C["teal"])
         _pill_button(p, "① Validate BOM", self._validate_e1, C["teal"], height=32).pack(fill="x", padx=12, pady=(6,4))
+        
         self._btn_e1 = _run_button(p, "② GENERATE 3D PARTS", self._run_e1, C["teal"])
         self._btn_e1.pack(fill="x", padx=12, pady=(0,4))
 
@@ -745,8 +786,9 @@ class SiraalGUI(ctk.CTk):
         _divider(p, "ACTIONS", C["gold"])
         self._btn_m_save = _pill_button(p, "① Save Excel", self._save_manual_excel, C["gold"], height=32)
         self._btn_m_save.pack(fill="x", padx=12, pady=(0,4))
+        
         self._btn_m_run = _run_button(p, "② VALIDATE & GENERATE 3D", self._run_manual, C["gold"])
-        self._btn_m_run.pack(fill="x", padx=12, pady=(0,8))
+        self._btn_m_run.pack(fill="x", padx=12, pady=(0,4))
 
         self._m_status = ctk.CTkLabel(p, text="● Ready", font=ctk.CTkFont("Segoe UI",10,"bold"), text_color=C["ok"])
         self._m_status.pack(pady=4)
@@ -1230,6 +1272,84 @@ class SiraalGUI(ctk.CTk):
             self._q4.put(("apply_fail", str(e)))
 
     # ─────────────────────────────────────────────────────────────────────────
+    # GLOBAL COST ENGINE INTEGRATION
+    # ─────────────────────────────────────────────────────────────────────────
+    def _get_current_log_q(self):
+        """Returns the queue and progress key for the currently active tab."""
+        curr = self._tabs.get()
+        if "EXCEL" in curr: return self._q1, "prog1"
+        elif "MANUAL" in curr: return self._q2, "prog2"
+        elif "SHAPE" in curr: return self._q3, "prog3"
+        elif "COPILOT" in curr: return self._q4, "prog4"
+        return self._q1, "prog1"
+
+    def _run_global_cost(self):
+        self._btn_global_cost.configure(state="disabled")
+        threading.Thread(target=self._t_run_global_cost, daemon=True).start()
+
+    def _t_run_global_cost(self):
+        q, prog_key = self._get_current_log_q()
+        try:
+            curr_tab = self._tabs.get()
+            parts = []
+            
+            # 1. Determine data source based on active tab
+            if "MANUAL" in curr_tab:
+                parts = self._get_manual_parts()
+                if not parts:
+                    q.put(("log", "✘ Error: No parts defined in Manual Mode."))
+                    return
+            else:
+                path = ""
+                if "EXCEL" in curr_tab: path = self._e1_file.get()
+                elif "COPILOT" in curr_tab: path = self._cp_file.get()
+                
+                # If path is empty/invalid, or we're on the AI Shape tab, prompt the user
+                if not path or not os.path.exists(path):
+                    path = filedialog.askopenfilename(title="Select BOM for ESG & Cost Analysis", filetypes=[("Excel", "*.xlsx *.xls")])
+                    if not path: return
+                        
+                q.put(("log", f"SYSTEM  Generating Economic & ESG Report for {os.path.basename(path)}..."))
+                
+                from validator_3d import Validator3D
+                v = Validator3D(path, log_callback=lambda m: None) # Silent validation
+                v.run_checks()
+                parts = v.valid_parts
+
+            if not parts:
+                q.put(("log", "✘ Error: No valid parts found to analyze."))
+                return
+
+            # 2. Run Cost Engine
+            q.put((prog_key, (0.3, "Analyzing costs & carbon footprint...")))
+            from cost_engine import CostEngine
+            
+            metal_key = os.environ.get("METALPRICE_API_KEY", "")
+            gemini_key = os.environ.get("GEMINI_API_KEY", "").strip()
+            q.put(("log", "SYSTEM  Fetching live metal prices and running cost analysis with AI..."))
+            engine = CostEngine(metal_api_key=metal_key, gemini_api_key=gemini_key)
+            
+            engine.fetch_live_metal_prices() 
+            
+            out_pdf = os.path.abspath(f"output_reports/Siraal_ESG_Cost_Report_{int(time.time())}.pdf")
+            success = engine.export_pdf_report(parts, out_pdf)
+            
+            if success:
+                q.put(("log", f"✔ PDF Report Generated: {out_pdf}"))
+                q.put((prog_key, (1.0, "Report Ready!")))
+                try:
+                    os.startfile(out_pdf) 
+                except Exception as e: 
+                    q.put(("log", f"Could not auto-open PDF: {e}"))
+            else:
+                q.put(("log", "✘ Failed to generate PDF (is fpdf2 installed?)"))
+
+        except Exception as e:
+            q.put(("log", f"✘ Crash during report generation: {e}\n{traceback.format_exc()}"))
+        finally:
+            self.after(0, lambda: self._btn_global_cost.configure(state="normal"))
+
+    # ─────────────────────────────────────────────────────────────────────────
     # QUEUE POLLERS
     # ─────────────────────────────────────────────────────────────────────────
     def _poll_q1(self):
@@ -1243,7 +1363,8 @@ class SiraalGUI(ctk.CTk):
                 elif k=="status1": self._e1_status.configure(text=f"● {d[0]}", text_color=d[1])
                 elif k=="btn1": self._btn_e1.configure(state="normal")
         except queue.Empty: pass
-        self.after(100, self._poll_q1)
+        except Exception as e: print(f"UI Queue 1 Error: {e}") # Prevents UI freezing if a log fails
+        finally: self.after(100, self._poll_q1)
 
     def _poll_q2(self):
         try:
@@ -1254,7 +1375,8 @@ class SiraalGUI(ctk.CTk):
                 elif k=="status2": self._m_status.configure(text=f"● {d[0]}", text_color=d[1])
                 elif k=="btn2": self._btn_m_run.configure(state="normal")
         except queue.Empty: pass
-        self.after(110, self._poll_q2)
+        except Exception as e: print(f"UI Queue 2 Error: {e}")
+        finally: self.after(110, self._poll_q2)
 
     def _poll_q3(self):
         try:
@@ -1266,7 +1388,8 @@ class SiraalGUI(ctk.CTk):
                 elif k=="btn_ai_gen": self._btn_ai_gen.configure(state="normal")
                 elif k=="btn_ai_run": self._btn_ai_run.configure(state="normal")
         except queue.Empty: pass
-        self.after(120, self._poll_q3)
+        except Exception as e: print(f"UI Queue 3 Error: {e}")
+        finally: self.after(120, self._poll_q3)
         
     def _poll_q4(self):
         try:
@@ -1295,7 +1418,8 @@ class SiraalGUI(ctk.CTk):
                     self._btn_cp_apply.configure(state="normal")
                     self._btn_cp_preview.configure(state="normal")
         except queue.Empty: pass
-        self.after(130, self._poll_q4)
+        except Exception as e: print(f"UI Queue 4 Error: {e}")
+        finally: self.after(130, self._poll_q4)
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 if __name__ == "__main__":

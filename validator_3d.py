@@ -1,11 +1,12 @@
 """
-validator_3d.py — Siraal 3D Gear Validator v2.0
+validator_3d.py — Siraal 3D Gear Validator v3.0
 Validates demo_gears_3d.xlsx (sheet: BOM_Gears) before 3D gear generation.
 Supports: Spur_Gear_3D, Helical_Gear, Ring_Gear_3D, Bevel_Gear, Worm, Worm_Wheel
-Also supports legacy solid types for backwards compatibility.
+*NEW: Dynamic Custom Factory Rules via custom_rules.json*
 """
 import os
 import math
+import json
 import pandas as pd
 from dataclasses import dataclass, field
 from enum import Enum
@@ -45,7 +46,18 @@ SOLID_TYPES = {
 OTHER_TYPES = {
    'Flange','Stepped_Shaft','L_Bracket'
 }
-ALL_TYPES = GEAR_TYPES | SOLID_TYPES | OTHER_TYPES
+
+def get_all_valid_types():
+    base_types = GEAR_TYPES | SOLID_TYPES | OTHER_TYPES
+    customs = set()
+    t_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
+    if os.path.exists(t_path):
+        for f in os.listdir(t_path):
+            if f.startswith("Custom_") and f.endswith(".json"):
+                customs.add(f.replace(".json", ""))
+    return base_types | customs
+
+ALL_TYPES = get_all_valid_types()
 
 # Sheet names to try — handles both old and new Excel layouts
 SHEET_CANDIDATES = ["BOM_Gears", "BOM_3D", "BOM", "Parts"]
@@ -60,6 +72,10 @@ class Validator3D:
         self.valid_parts:  List[dict]            = []
         self.error_count   = 0
         self.warning_count = 0
+        
+        # Load Dynamic Factory Rules
+        self.custom_rules = []
+        self._load_custom_rules()
 
     def _log(self, msg):
         self._log_cb(msg)
@@ -91,6 +107,49 @@ class Validator3D:
         self._log(f"[✘] FATAL: Could not read any BOM sheet from '{self.file_path}'")
         self._log(f"    Tried sheets: {SHEET_CANDIDATES}")
         return None
+
+    def _load_custom_rules(self):
+        """Loads the dynamic custom factory rules from JSON."""
+        rule_file = "custom_rules.json"
+        if os.path.exists(rule_file):
+            try:
+                with open(rule_file, "r") as f:
+                    data = json.load(f)
+                    self.custom_rules = data.get("rules", [])
+            except Exception as e:
+                self._log(f" ⚠ Warning: Could not parse {rule_file}: {e}")
+
+    # ── DYNAMIC RULES EXECUTION ───────────────────────────────────────────────
+
+    def _check_custom_rules(self, pno, ptype, mat, p1, p2, p3, p4, qty):
+        """Runs the python math sandbox for custom dynamic rules."""
+        err = False
+        for rule in self.custom_rules:
+            t_type = rule.get("target_type", "ALL")
+            t_mat = rule.get("target_material", "ALL")
+
+            # 1. Filter: Does this rule apply to this part?
+            if t_type != "ALL" and t_type != ptype: continue
+            if t_mat != "ALL" and t_mat != mat: continue
+
+            cond = rule.get("condition", "")
+            sev_str = rule.get("severity", "ERROR").upper()
+            msg = rule.get("message", f"Violated Custom Rule: {rule.get('rule_id')}")
+
+            # 2. Map the Variables
+            env = {"P1": p1, "P2": p2, "P3": p3, "P4": p4, "QTY": qty}
+            
+            # 3. Secure Evaluation
+            try:
+                # We block builtins so users can't run malicious code like `os.remove` in the condition
+                is_violated = eval(cond, {"__builtins__": None}, env)
+                if is_violated:
+                    sev = Severity.ERROR if sev_str == "ERROR" else Severity.WARNING if sev_str == "WARNING" else Severity.INFO
+                    self._add(pno, sev, rule.get("rule_id", "CUSTOM_RULE"), msg)
+                    if sev == Severity.ERROR: err = True
+            except Exception as e:
+                self._log(f" ⚠ Failed to evaluate rule '{rule.get('rule_id')}' condition ({cond}): {e}")
+        return err
 
     # ── Per-type geometry rules ───────────────────────────────────────────────
 
@@ -250,7 +309,7 @@ class Validator3D:
     def run_checks(self) -> bool:
         self._log("")
         self._log("─" * 62)
-        self._log("  SIRAAL 3D GEAR VALIDATOR v2.0")
+        self._log("  SIRAAL 3D GEAR VALIDATOR v3.0 (Dynamic Rules Enabled)")
         self._log("  Supports: Spur · Helical · Ring · Bevel · Worm · Worm Wheel")
         self._log("─" * 62)
 
@@ -283,9 +342,10 @@ class Validator3D:
                 p2 = float(row.get("Param_2", 0) or 0)
                 p3 = float(row.get("Param_3", 0) or 0)
                 p4 = float(row.get("Param_4", 0) or 0)
+                qty = float(row.get("Qty", 1) or 1) # Extracted for custom rules
             except Exception:
                 self._add(pno, Severity.ERROR, "PARAM_PARSE",
-                          "Non-numeric P1–P4 — check Excel values")
+                          "Non-numeric P1–P4 or Qty — check Excel values")
                 continue
 
             has_error = False
@@ -301,13 +361,12 @@ class Validator3D:
                           f"'{ptype}' not recognised. Valid: {sorted(ALL_TYPES)}")
                 continue
 
-            # Per-type geometry rules
+            # 1. HARDCODED GEOMETRY RULES
             if   ptype == "Spur_Gear_3D":
                 has_error = self._check_spur(pno, int(p1), p2, p3, p4)
             elif ptype == "Helical_Gear":
                 has_error = self._check_helical(pno, int(p1), p2, p3, p4)
             elif ptype == "Ring_Gear_3D":
-                # P4 = ring thickness for Ring gear
                 has_error = self._check_ring(pno, int(p1), p2, p3, p4)
             elif ptype == "Bevel_Gear":
                 has_error = self._check_bevel(pno, int(p1), p2, p3, p4)
@@ -315,12 +374,18 @@ class Validator3D:
                 has_error = self._check_worm(pno, int(p1), p2, p3, p4)
             elif ptype == "Worm_Wheel":
                 has_error = self._check_worm_wheel(pno, int(p1), p2, p3, p4)
-            # Legacy solid types
             elif ptype == "Box":
                 has_error = self._check_box(pno, p1, p2, p3, p4)
             elif ptype == "Cylinder":
                 has_error = self._check_cylinder(pno, p1, p2, p3, p4)
 
+            # 2. DYNAMIC CUSTOM FACTORY RULES
+            # These run universally and evaluate custom company rules against the parameters
+            custom_error = self._check_custom_rules(pno, ptype, mat, p1, p2, p3, p4, qty)
+            if custom_error:
+                has_error = True
+
+            # Wrap up
             if not has_error:
                 row_dict = row.to_dict()
                 row_dict["_validated"] = True
