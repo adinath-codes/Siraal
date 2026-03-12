@@ -7,14 +7,6 @@
             "condition": "P3 > 200",
             "severity": "ERROR",
             "message": "Face width (P3) exceeds maximum 200mm limit for our machines."
-        },
-        {
-            "rule_id": "new rule",
-            "target_type": "Custom_Aero_Hub_Plate",
-            "target_material": "ALL",
-            "condition": "P1>200 and P1<1500",
-            "severity": "ERROR",
-            "message": ""
         }
     ]
 }

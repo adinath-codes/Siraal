@@ -3,6 +3,7 @@ rules_editor_gui.py  —  Siraal Dynamic Validation Editor
 ========================================================
 GUI for managing factory constraints (custom_rules.json).
 Features Role-Based Access Control (Admin vs Viewer).
+Includes ISO 9001 / AS9100 compliant Audit Logging.
 """
 
 import customtkinter as ctk
@@ -10,6 +11,13 @@ import tkinter as tk
 from tkinter import simpledialog, messagebox
 import json
 import os
+
+# --- ENTERPRISE AUDIT LOGGER ---
+try:
+    from audit_logger import log_event
+except ImportError:
+    # Fallback if the file is missing, prevents crashes
+    def log_event(role, action, details, is_warning=False): pass
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # DESIGN SYSTEM & CONSTANTS
@@ -28,7 +36,7 @@ C = {
 RULES_FILE = "custom_rules.json"
 ADMIN_PASSWORD = "admin" # Hardcoded for the hackathon prototype
 
-# --- NEW: Dynamically fetch all base types + custom templates ---
+# --- Dynamically fetch all base types + custom templates ---
 def get_all_target_types():
     base_types = [
         "ALL", "Spur_Gear_3D", "Helical_Gear", "Ring_Gear_3D", "Bevel_Gear", 
@@ -69,7 +77,6 @@ class RulesEditor(ctk.CTk):
     # ── DATA HANDLING ────────────────────────────────────────────────────────
     def _load_rules_from_disk(self):
         if not os.path.exists(RULES_FILE):
-            # Create default if missing
             self.rules = []
             self._save_rules_to_disk()
         else:
@@ -153,8 +160,6 @@ class RulesEditor(ctk.CTk):
         
         # Row 2: Target Type & Material
         r2 = ctk.CTkFrame(right_p, fg_color="transparent"); r2.pack(fill="x", padx=20, pady=5)
-        
-        # We pass GEAR_TYPES (which now includes your custom templates)
         self._build_combo(r2, "Target Part Type:", self.v_type, GEAR_TYPES, 200)
         self._build_combo(r2, "Target Material:", self.v_mat, MATERIALS, 200)
         
@@ -165,7 +170,6 @@ class RulesEditor(ctk.CTk):
         cond_entry.pack(fill="x", pady=2)
         self.form_widgets.append(cond_entry)
         
-        # The font slant issue fixed here as well!
         ctk.CTkLabel(r3, text="Variables: P1 (Teeth), P2 (Module), P3 (Width), P4 (Bore), QTY. Example: P3 > 150 and P2 < 2", font=ctk.CTkFont("Segoe UI", 9, slant="italic"), text_color=C["text3"]).pack(anchor="w")
         
         # Row 4: Message
@@ -204,16 +208,19 @@ class RulesEditor(ctk.CTk):
     # ── LOGIC ────────────────────────────────────────────────────────────────
     def _on_role_change(self, choice):
         if choice == "Admin":
-            # Prompt for password
             pwd = simpledialog.askstring("Admin Access", "Enter Admin Password:", show='*')
             if pwd == ADMIN_PASSWORD:
                 self.current_role = "Admin"
+                log_event("ADMIN", "LOGIN_SUCCESS", "User elevated to Admin privileges.")
                 messagebox.showinfo("Success", "Admin access granted. You can now edit rules.")
             else:
+                log_event("VIEWER", "LOGIN_FAILED", "Failed Admin password attempt.", is_warning=True)
                 messagebox.showerror("Denied", "Incorrect password.")
                 self.role_var.set("Viewer")
                 self.current_role = "Viewer"
         else:
+            if self.current_role == "Admin":
+                log_event("ADMIN", "LOGOUT", "User reverted to Viewer role.")
             self.current_role = "Viewer"
             
         self._enforce_access_control()
@@ -294,6 +301,10 @@ class RulesEditor(ctk.CTk):
             self.selected_index = len(self.rules) - 1
             
         self._save_rules_to_disk()
+        
+        # --- AUDIT LOGGING ---
+        log_event(self.current_role, "RULE_SAVED", f"Created/Updated factory rule ID: {r_id}")
+        
         self._refresh_rule_list()
         messagebox.showinfo("Saved", f"Rule '{r_id}' saved successfully.")
 
@@ -307,6 +318,10 @@ class RulesEditor(ctk.CTk):
         if confirm:
             self.rules.pop(self.selected_index)
             self._save_rules_to_disk()
+            
+            # --- AUDIT LOGGING ---
+            log_event(self.current_role, "RULE_DELETED", f"Deleted factory rule ID: {r_id}", is_warning=True)
+            
             self._on_new_rule()
             self._refresh_rule_list()
 

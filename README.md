@@ -16,3 +16,92 @@ Prompt: Create a high-performance gear hub. Start with a cylindrical base (radiu
 
 Name: Serrated_Lock_Washer
 Prompt: Create a flat ring with outer radius P1, inner radius P4, and thickness P3. Now, create a serrated edge: Subtract 36 small boxes around the outer perimeter. Each box should be width 5, length 10, and height P3. Rotate each box by 10 degrees relative to the previous one to create a saw-tooth pattern.
+
+
+
+ENTERPRISE_TEMPLATES = {
+    "Bearing_Housing": {
+        "description": "Standard industrial bearing housing. P1=Outer OD, P2=Bore ID, P3=Length.",
+        "operations": [
+            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P3", "x": "0", "y": "0", "z": "0"}},
+            {"type": "subtract", "shape": "cylinder", "params": {"r": "P2/2", "h": "P3", "x": "0", "y": "0", "z": "0"}}
+        ]
+    },
+    "Drone_Motor_Mount": {
+        "description": "Quad-copter motor mounting bracket. P1=Base Width, P2=Thickness, P3=Center Hole Dia.",
+        "operations": [
+            {"type": "add", "shape": "box", "params": {"l": "P1", "w": "P1", "h": "P2", "x": "0", "y": "0", "z": "0"}},
+            {"type": "subtract", "shape": "cylinder", "params": {"r": "P3/2", "h": "P2", "x": "0", "y": "0", "z": "0"}}
+        ]
+    },
+    "Aerospace_Flange": {
+        "description": "High-pressure pipe flange. P1=Flange OD, P2=Pipe ID, P3=Thickness.",
+        "operations": [
+            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P3", "x": "0", "y": "0", "z": "0"}},
+            {"type": "subtract", "shape": "cylinder", "params": {"r": "P2/2", "h": "P3", "x": "0", "y": "0", "z": "0"}}
+        ]
+    },
+    "Robotics_Chassis_Plate": {
+        "description": "Main base plate for an AGV robot. P1=Length, P2=Width, P3=Thickness.",
+        "operations": [
+            {"type": "add", "shape": "box", "params": {"l": "P1", "w": "P2", "h": "P3", "x": "0", "y": "0", "z": "0"}},
+            # Hollow out the center slightly for weight reduction
+            {"type": "subtract", "shape": "box", "params": {"l": "P1*0.6", "w": "P2*0.6", "h": "P3", "x": "0", "y": "0", "z": "0"}}
+        ]
+    },
+    "Splined_Shaft": {
+        "description": "Power transmission shaft. P1=Length, P2=Diameter, P3=Spline Depth.",
+        "operations": [
+            {"type": "add", "shape": "cylinder", "params": {"r": "P2/2", "h": "P1", "x": "0", "y": "0", "z": "0"}},
+            # Simulating a spline groove
+            {"type": "subtract", "shape": "box", "params": {"l": "P2+2", "w": "P3", "h": "P1", "x": "0", "y": "0", "z": "0"}}
+        ]
+    },
+    "Sensor_Bracket_L": {
+        "description": "L-Bracket for optical sensors. P1=Height, P2=Base Length, P3=Thickness.",
+        "operations": [
+            {"type": "add", "shape": "box", "params": {"l": "P3", "w": "P2", "h": "P1", "x": "-P3/2", "y": "P2/2", "z": "0"}},
+            {"type": "add", "shape": "box", "params": {"l": "P2", "w": "P3", "h": "P3", "x": "P2/2", "y": "0", "z": "0"}}
+        ]
+    },
+    "Pulley_Wheel": {
+        "description": "V-belt pulley wheel. P1=Outer Dia, P2=Thickness, P3=Bore Dia.",
+        "operations": [
+            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P2", "x": "0", "y": "0", "z": "0"}},
+            {"type": "subtract", "shape": "cylinder", "params": {"r": "P3/2", "h": "P2", "x": "0", "y": "0", "z": "0"}}
+        ]
+    },
+    "Heat_Sink_Base": {
+        "description": "Thermal dissipation block. P1=Length, P2=Width, P3=Fin Height.",
+        "operations": [
+            {"type": "add", "shape": "box", "params": {"l": "P1", "w": "P2", "h": "P3", "x": "0", "y": "0", "z": "0"}}
+        ]
+    },
+    "Hydraulic_Piston_Cap": {
+        "description": "End cap for hydraulic cylinders. P1=Outer Dia, P2=Inner Dia, P3=Height.",
+        "operations": [
+            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P3", "x": "0", "y": "0", "z": "0"}},
+            {"type": "subtract", "shape": "cylinder", "params": {"r": "P2/2", "h": "P3/2", "x": "0", "y": "0", "z": "P3/2"}}
+        ]
+    },
+    "Motor_Coupling": {
+        "description": "Shaft coupling for NEMA motors. P1=Outer Dia, P2=Length, P3=Bore Dia.",
+        "operations": [
+            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P2", "x": "0", "y": "0", "z": "0"}},
+            {"type": "subtract", "shape": "cylinder", "params": {"r": "P3/2", "h": "P2", "x": "0", "y": "0", "z": "0"}}
+        ]
+    },
+    "Conveyor_Roller": {
+        "description": "Material handling roller. P1=Roller Dia, P2=Length, P3=Axle Dia.",
+        "operations": [
+            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P2", "x": "0", "y": "0", "z": "0"}},
+            {"type": "subtract", "shape": "cylinder", "params": {"r": "P3/2", "h": "P2", "x": "0", "y": "0", "z": "0"}}
+        ]
+    },
+    "CNC_Fixture_Plate": {
+        "description": "Tooling plate for 5-axis machines. P1=Length, P2=Width, P3=Thickness.",
+        "operations": [
+            {"type": "add", "shape": "box", "params": {"l": "P1", "w": "P2", "h": "P3", "x": "0", "y": "0", "z": "0"}}
+        ]
+    }
+}
