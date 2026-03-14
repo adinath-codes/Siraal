@@ -2,7 +2,7 @@
 Name: Aero_Hub_Plate
 Prompt: Create a circular base with radius P1 and thickness P3. Add a central cylindrical boss on top with radius P2 and height P3*2. Subtract a hole through the very center with diameter P4 that goes through the entire part. Finally, subtract four small bolt holes with radius 5 at the cardinal points (N, S, E, W) of the base plate, positioned at a distance of P1*0.75 from the center.
 
-Name: Sensor
+## Name: Sensor
 Prompt: I need a rectangular base block where the length is P1, width is P2, and height is P3. I need a circular pocket cut into the top center to hold the sensor. The pocket diameter is P4, and it should only be drilled halfway down into the block, not all the way through.
 
 Name: Radial_Cooling_Hub
