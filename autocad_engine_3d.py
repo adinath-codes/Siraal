@@ -2691,7 +2691,7 @@ class AutoCAD3DGearEngine:
             f"Custom_{ptype}",
             ptype.replace("Custom_", ""),
         ]
-        # Also try case-insensitive match against files in the templates dir
+        # Also try case-insensitive match against files in the templates 
         if os.path.isdir(templates_dir):
             existing = {f.lower(): f for f in os.listdir(templates_dir)
                         if f.endswith(".json")}

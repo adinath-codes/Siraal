@@ -10,7 +10,6 @@ gui_launcher_3d_apple.py  —  Siraal Manufacturing Engine  v6.0
   ▸ 100 % original functionality preserved
 ═══════════════════════════════════════════════════════════════════════════
 """
-
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import filedialog, messagebox
@@ -156,9 +155,9 @@ def _make_glass(bg, x, y, w, h, tint="#FFFFFF", tint_a=0.07, blur=18):
     return glass.convert("RGB")
 
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # ③  GLASS PANEL
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 class GlassPanel(ctk.CTkFrame):
     def __init__(self, parent, app, tint="#FFFFFF", tint_a=0.07,
                  accent=None, blur=18, **kwargs):
