@@ -1,107 +1,133 @@
-## GENAI TEST
-Name: Aero_Hub_Plate
-Prompt: Create a circular base with radius P1 and thickness P3. Add a central cylindrical boss on top with radius P2 and height P3*2. Subtract a hole through the very center with diameter P4 that goes through the entire part. Finally, subtract four small bolt holes with radius 5 at the cardinal points (N, S, E, W) of the base plate, positioned at a distance of P1*0.75 from the center.
+# ⚙️ Siraal (🏆 WINNING ENTERPRISE PROJECT)
 
-## Name: Sensor
-Prompt: I need a rectangular base block where the length is P1, width is P2, and height is P3. I need a circular pocket cut into the top center to hold the sensor. The pocket diameter is P4, and it should only be drilled halfway down into the block, not all the way through.
+**The Deterministic AI-to-CAD Manufacturing Engine.**
 
-Name: Radial_Cooling_Hub
-Prompt: Create a central cylindrical core with radius P2 and height P3. Subtract a central bore hole with diameter P4 through the core. Now, create a radial array of cooling fins: add 8 thin rectangular boxes, each with length P1, width 5, and height P3. Position each box so it radiates from the center. Space them at 45-degree intervals. Finally, subtract a sphere from the very top center with radius P2 to create a smooth aerodynamic dish effect on the top of the hub.
+Siraal is an enterprise-grade automation platform that bridges the gap between business data, Large Language Models, and deterministic CAD software. It enables mechanical engineers and procurement teams to generate complex 3D geometry from Excel BOMs or natural language, validate it against strict factory rules, and run real-time cost and ESG audits before the metal is ever purchased.
 
-Name:Bio_Lightweight_Bracket
-Prompt:Create a complex, bio-inspired bracket. Start with a robust L-shaped bracket base: a vertical plate (length P1, width 10, height P3) joined to a horizontal plate (length P1, width P2, height 10). Now, perform 'material reduction' for a lightweight, optimized design. Subtract an array of 5 large, hexagonal-shaped cylinder holes through the face of the vertical plate. Position them in a zigzag pattern to maximize structural integrity while minimizing weight. Then, subtract a series of 3 smaller, organic, pocket-style sphere holes from the horizontal base plate. Finally, subtract a precise mounting through-hole (diameter P4) at each end of the vertical plate.
+## 🌄 Demo
 
-Name: Aerospace_Gear_Blank
-Prompt: Create a high-performance gear hub. Start with a cylindrical base (radius P1, height P3) representing the outer rim. Now, skeletonize it for weight reduction: Subtract a cylindrical ring between radius P4 and P1*0.8, leaving only a outer rim and a central hub. Now, add 6 structural 'spokes' connecting the center to the rim: each spoke is a box (length P1, width 8, height P3) rotated at 60-degree intervals. Finally, subtract a precision keyed-bore from the center: a cylinder hole (radius 15, height P3+10) with a small rectangular keyway box (width 5, length 5, height P3+10) subtracted at the top of the bore.
+[](https://www.google.com/search?q=%5BYOUR_LINKEDIN_LINK_HERE%5D\(https://www.linkedin.com/\)) [](https://www.google.com/search?q=%5BYOUR_YOUTUBE_VIDEO_LINK_HERE%5D\(https://www.youtube.com/\))
 
-Name: Serrated_Lock_Washer
-Prompt: Create a flat ring with outer radius P1, inner radius P4, and thickness P3. Now, create a serrated edge: Subtract 36 small boxes around the outer perimeter. Each box should be width 5, length 10, and height P3. Rotate each box by 10 degrees relative to the previous one to create a saw-tooth pattern.
+*(Note: Replace placeholder image links with your actual Siraal UI screenshots)*
 
+-----
 
+## 🚀 Key Features
 
-ENTERPRISE_TEMPLATES = {
-    "Bearing_Housing": {
-        "description": "Standard industrial bearing housing. P1=Outer OD, P2=Bore ID, P3=Length.",
-        "operations": [
-            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P3", "x": "0", "y": "0", "z": "0"}},
-            {"type": "subtract", "shape": "cylinder", "params": {"r": "P2/2", "h": "P3", "x": "0", "y": "0", "z": "0"}}
-        ]
-    },
-    "Drone_Motor_Mount": {
-        "description": "Quad-copter motor mounting bracket. P1=Base Width, P2=Thickness, P3=Center Hole Dia.",
-        "operations": [
-            {"type": "add", "shape": "box", "params": {"l": "P1", "w": "P1", "h": "P2", "x": "0", "y": "0", "z": "0"}},
-            {"type": "subtract", "shape": "cylinder", "params": {"r": "P3/2", "h": "P2", "x": "0", "y": "0", "z": "0"}}
-        ]
-    },
-    "Aerospace_Flange": {
-        "description": "High-pressure pipe flange. P1=Flange OD, P2=Pipe ID, P3=Thickness.",
-        "operations": [
-            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P3", "x": "0", "y": "0", "z": "0"}},
-            {"type": "subtract", "shape": "cylinder", "params": {"r": "P2/2", "h": "P3", "x": "0", "y": "0", "z": "0"}}
-        ]
-    },
-    "Robotics_Chassis_Plate": {
-        "description": "Main base plate for an AGV robot. P1=Length, P2=Width, P3=Thickness.",
-        "operations": [
-            {"type": "add", "shape": "box", "params": {"l": "P1", "w": "P2", "h": "P3", "x": "0", "y": "0", "z": "0"}},
-            # Hollow out the center slightly for weight reduction
-            {"type": "subtract", "shape": "box", "params": {"l": "P1*0.6", "w": "P2*0.6", "h": "P3", "x": "0", "y": "0", "z": "0"}}
-        ]
-    },
-    "Splined_Shaft": {
-        "description": "Power transmission shaft. P1=Length, P2=Diameter, P3=Spline Depth.",
-        "operations": [
-            {"type": "add", "shape": "cylinder", "params": {"r": "P2/2", "h": "P1", "x": "0", "y": "0", "z": "0"}},
-            # Simulating a spline groove
-            {"type": "subtract", "shape": "box", "params": {"l": "P2+2", "w": "P3", "h": "P1", "x": "0", "y": "0", "z": "0"}}
-        ]
-    },
-    "Sensor_Bracket_L": {
-        "description": "L-Bracket for optical sensors. P1=Height, P2=Base Length, P3=Thickness.",
-        "operations": [
-            {"type": "add", "shape": "box", "params": {"l": "P3", "w": "P2", "h": "P1", "x": "-P3/2", "y": "P2/2", "z": "0"}},
-            {"type": "add", "shape": "box", "params": {"l": "P2", "w": "P3", "h": "P3", "x": "P2/2", "y": "0", "z": "0"}}
-        ]
-    },
-    "Pulley_Wheel": {
-        "description": "V-belt pulley wheel. P1=Outer Dia, P2=Thickness, P3=Bore Dia.",
-        "operations": [
-            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P2", "x": "0", "y": "0", "z": "0"}},
-            {"type": "subtract", "shape": "cylinder", "params": {"r": "P3/2", "h": "P2", "x": "0", "y": "0", "z": "0"}}
-        ]
-    },
-    "Heat_Sink_Base": {
-        "description": "Thermal dissipation block. P1=Length, P2=Width, P3=Fin Height.",
-        "operations": [
-            {"type": "add", "shape": "box", "params": {"l": "P1", "w": "P2", "h": "P3", "x": "0", "y": "0", "z": "0"}}
-        ]
-    },
-    "Hydraulic_Piston_Cap": {
-        "description": "End cap for hydraulic cylinders. P1=Outer Dia, P2=Inner Dia, P3=Height.",
-        "operations": [
-            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P3", "x": "0", "y": "0", "z": "0"}},
-            {"type": "subtract", "shape": "cylinder", "params": {"r": "P2/2", "h": "P3/2", "x": "0", "y": "0", "z": "P3/2"}}
-        ]
-    },
-    "Motor_Coupling": {
-        "description": "Shaft coupling for NEMA motors. P1=Outer Dia, P2=Length, P3=Bore Dia.",
-        "operations": [
-            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P2", "x": "0", "y": "0", "z": "0"}},
-            {"type": "subtract", "shape": "cylinder", "params": {"r": "P3/2", "h": "P2", "x": "0", "y": "0", "z": "0"}}
-        ]
-    },
-    "Conveyor_Roller": {
-        "description": "Material handling roller. P1=Roller Dia, P2=Length, P3=Axle Dia.",
-        "operations": [
-            {"type": "add", "shape": "cylinder", "params": {"r": "P1/2", "h": "P2", "x": "0", "y": "0", "z": "0"}},
-            {"type": "subtract", "shape": "cylinder", "params": {"r": "P3/2", "h": "P2", "x": "0", "y": "0", "z": "0"}}
-        ]
-    },
-    "CNC_Fixture_Plate": {
-        "description": "Tooling plate for 5-axis machines. P1=Length, P2=Width, P3=Thickness.",
-        "operations": [
-            {"type": "add", "shape": "box", "params": {"l": "P1", "w": "P2", "h": "P3", "x": "0", "y": "0", "z": "0"}}
-        ]
-    }
-}
+  * **📊 Excel-to-CAD Automation:** Read raw Bill of Materials (BOM) data and programmatically drive the CAD COM interface to generate batch geometry with 0% human transcription error.
+  * **🧊 Patentable CSG JSON Architecture:** Decouples 3D intelligence from heavy B-Rep files (STEP/IGES). Siraal compiles lightweight, mathematical "executable algebraic blueprints" (JSON) that guarantee deterministic, crash-free CAD generation.
+  * **💬 Text-to-CAD & AI Mass Edit:** Use natural language to design parts (e.g., "Design a heavy-duty NEMA motor mount") or mass-edit hundreds of parts instantly prior to rendering.
+  * **💰 Autonomous AI Value Engineer:** Real-time cost estimation using live global metal pricing. Siraal calculates raw billet volume, CNC machining time, CO2 footprint, and flags terrible "Buy-to-Fly" waste ratios for immediate financial recovery.
+  * **🛡️ Enterprise Safety & Compliance:** A digital gatekeeper with a real-time Verification Rules Engine. Blocks impossible physical geometry and logs all managerial overrides into an immutable Audit Trail for strict ISO-9001 compliance.
+  * **🌐 The Siraal Library (B2B SaaS):** A cloud-based marketplace of mathematically perfect, AI-verified JSON manufacturing templates tailored for Tier-2 and Tier-3 contract manufacturers.
+
+-----
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+  * **ReactJS** + **Vite**: High-performance, modern UI rendering.
+  * **Tailwind CSS**: For enterprise-grade, glassmorphism-inspired styling and dashboards.
+  * **React Three Fiber (Three.js):** For lightweight, web-based 3D previews of the JSON CSG models.
+  * **Axios**: For asynchronous API communication with the local CAD engine.
+
+### Backend & Manufacturing Infrastructure
+
+  * **FastAPI**: Asynchronous API gateway acting as the "headless" orchestrator.
+  * **Python `win32com.client`**: Direct algorithmic driver for the AutoCAD COM API (The core CAD execution layer).
+  * **Gemini API**: Multimodal LLM engine utilized for Text-to-JSON mathematical translation and Value Engineering insights.
+  * **Live Commodity APIs**: Real-time fetching of global steel, aluminum, and titanium market prices.
+
+-----
+
+## 💻 Local Installation Guide
+
+Follow these steps to run Siraal locally on your machine.
+
+### Prerequisites
+
+  * **OS:** Windows 10 or Windows 11 (Mandatory for AutoCAD COM interface compatibility).
+  * **CAD Software:** Autodesk AutoCAD installed and licensed on the host machine.
+  * **Python:** Version 3.10 or higher.
+  * **Node.js:** Version 18+.
+
+### 1\. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/siraal-engine.git
+cd siraal-engine
+```
+
+## 📂 Project Structure
+
+Here is an overview of the repository's architecture:
+
+```text
+siraal-engine/
+├── siraal-ui/               # 🎨 Frontend Source Code (React + Vite)
+│   ├── src/                 # React components, Dashboards, and 3D Web Viewer
+│   ├── public/              # Static assets and icons
+│   └── package.json         # Frontend dependencies (Tailwind, Three.js, etc.)
+│
+├── siraal-core/             # 🧠 Backend & CAD Infrastructure (Python)
+│   ├── apis/                # Main FastAPI Application
+│   │   ├── main.py          # API Gateway & Logic Orchestrator
+│   │   ├── cad_driver.py    # Bridge to AutoCAD COM Interface (Critical)
+│   │   ├── rules_engine.py  # ISO-9001 Validation & Safety Logic
+│   │   └── requirements.txt # Python dependencies (FastAPI, pywin32, requests)
+│   │
+│   ├── templates/           # 🧊 CSG JSON Library
+│   │   └── standard_parts/  # Executable algebraic blueprints (e.g., V8_Engine.json)
+│   │
+│   └── logs/                # 🛡️ Enterprise Audit Trails
+│       └── audit_trail.log  # Immutable record of rule overrides
+│
+├── reports/                 # 📊 Generated AI Value Engineering PDFs
+└── README.md                # Project Documentation
+```
+
+## ⚙️ Setup Guidelines
+
+To run the Siraal Manufacturing Engine locally, ensure AutoCAD is installed and follow these steps:
+
+### 1\. System Requirements
+
+  * **OS:** Windows 10/11 (Required for `pywin32` COM interactions).
+  * **RAM:** 16GB System RAM recommended for smooth CAD compilation.
+  * **Software:** AutoCAD must be installed. It is recommended to have AutoCAD open before launching the backend.
+
+### 2\. Environment Setup (Backend)
+
+Siraal requires a Python environment capable of communicating with Windows COM objects.
+
+```bash
+# Navigate to backend
+cd siraal-core
+
+# Create & Activate Virtual Environment
+python -m venv .venv
+.venv\Scripts\activate
+
+# Install Dependencies (FastAPI, pywin32, etc.)
+cd apis
+pip install -r requirements.txt
+
+# Running the Headless Engine
+python main.py
+```
+
+### 3\. Environment Setup (Frontend)
+
+Siraal requires the ReactJS + Vite frontend dashboard to interact with the backend engine.
+
+```bash
+# Open a new terminal and navigate to frontend
+cd siraal-ui
+
+# Install Dependencies (Tailwind, React Three Fiber, Axios)
+npm install
+
+# Running the Dashboard
+npm run dev
+```

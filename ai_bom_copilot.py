@@ -68,7 +68,10 @@ SOLID_TYPES = {
     "Box", "Cylinder", "Cone", "Sphere",
     "Flanged_Boss", "Extruded_Profile", "Revolved_Part",
 }
-ALL_TYPES = GEAR_TYPES | SOLID_TYPES
+OTHER_TYPES = {
+   'Flange','Stepped_Shaft','L_Bracket'
+}
+ALL_TYPES = GEAR_TYPES | SOLID_TYPES | OTHER_TYPES
 
 MATERIAL_DB: Dict[str, Dict[str, float]] = {
     "Steel-1020": {"density": 7.87e-3, "cost_per_kg": 125.0,  "uts": 420},
@@ -362,7 +365,7 @@ class BomIO:
             ws.cell(row=row, column=4, value=n_changed)
             wb.save(self.path)
         except Exception:
-            pass   # ChangeLog write failure is non-fatal
+            pass   # ChangeLog write failure is non-fatal and should not block the main save
 
     # ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -404,7 +407,7 @@ class BomValidator:
         for part in parts:
             pno = part.part_number
 
-            # ── Structural checks ──────────────────────────────────────────────
+            # ── Structural checks ──────
             if not pno:
                 self._add(report, pno, IssueSeverity.ERROR, "MISSING_PARTNO",
                           "Part_Number is blank")
@@ -415,7 +418,7 @@ class BomValidator:
                           f"Duplicate Part_Number '{pno}'")
             seen_part_nos.add(pno)
 
-            if part.part_type not in ALL_TYPES:
+            if False or part.part_type not in ALL_TYPES:
                 self._add(report, pno, IssueSeverity.ERROR, "UNKNOWN_TYPE",
                           f"'{part.part_type}' not recognised. Valid: {sorted(ALL_TYPES)}")
                 continue

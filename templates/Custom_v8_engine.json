@@ -1,0 +1,1228 @@
+{
+  "Part_Name": "V8_Engine_Complete",
+  "Description": "Complete V8 engine \u2014 fixed coordinate alignment and overlap. P1=bore mm  P2=stroke mm  P3=bore_spacing mm  P4=wall_t mm. Use: P1=92 P2=86 P3=120 P4=14",
+  "Steps": [
+    {
+      "action": "SET_VAR",
+      "var": "V1",
+      "expr": "P1/2"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V2",
+      "expr": "P3*4",
+      "note": "bank length"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V3",
+      "expr": "P2*1.45",
+      "note": "block height"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V4",
+      "expr": "P1*0.72 + P4",
+      "note": "bank half-width"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V5",
+      "expr": "P1/2 + P4",
+      "note": "cylinder outer radius"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V6",
+      "expr": "P1*0.052",
+      "note": "bolt hole radius"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V7",
+      "expr": "P2*0.22",
+      "note": "oil pan depth"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V8",
+      "expr": "P1*0.88",
+      "note": "head height"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V9",
+      "expr": "P2*0.16",
+      "note": "valve cover height"
+    },
+    {
+      "action": "BASE",
+      "shape": "box",
+      "length": "V2+P4*2",
+      "width": "V4*2+P4*2",
+      "height": "V7",
+      "origin": "corner",
+      "x_offset": "-P4",
+      "y_offset": "-(V4+P4)",
+      "z": "0",
+      "note": "Sump \u2014 wider than block on all sides"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "box",
+      "length": "V2",
+      "width": "V4*2",
+      "height": "V7-P4*0.8",
+      "origin": "corner",
+      "x_offset": "0",
+      "y_offset": "-V4",
+      "z": "P4*0.8",
+      "note": "Hollow sump cavity"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.028",
+      "height": "P4+10",
+      "z": "-5",
+      "y_offset": "0",
+      "x_offset": "V2*0.50",
+      "note": "Drain plug"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*0.65",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4+P4*0.55"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*0.65",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "-(V4+P4*0.55)"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "extrude_profile",
+      "height": "V3",
+      "z": "V7",
+      "overlap": 3,
+      "points": [
+        "0",
+        "0",
+        "V2",
+        "0",
+        "V2",
+        "V4*0.78",
+        "V2*0.95",
+        "V4",
+        "V2*0.05",
+        "V4",
+        "0",
+        "V4*0.78"
+      ],
+      "note": "Bank 1 \u2014 trapezoid inline-4 cross-section, x spans 0\u2192V2"
+    },
+    {
+      "action": "MIRROR",
+      "plane": "XZ",
+      "note": "Bank 2 \u2014 mirrors Bank 1 through XZ \u2192 90\u00b0 V8"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "V2",
+      "width": "P4*3.2",
+      "height": "V3*0.32",
+      "origin": "corner",
+      "x_offset": "0",
+      "y_offset": "-P4*1.6",
+      "z": "V7",
+      "overlap": 3
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V1",
+      "height": "V3+10",
+      "z": "V7-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4*0.42"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V1",
+      "height": "V3+10",
+      "z": "V7-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "-V4*0.42"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V1*0.28",
+      "height": "V3*0.80+10",
+      "z": "V7+V3*0.20-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4*0.42+V5*0.78"
+    },
+    {
+      "action": "ARRAY_GRID",
+      "rows": 2,
+      "cols": 4,
+      "dx": "P3",
+      "dy": "V5*1.56",
+      "start_x": "0",
+      "start_y": "-V5*0.78"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V1*0.28",
+      "height": "V3*0.80+10",
+      "z": "V7+V3*0.20-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "-(V4*0.42+V5*0.78)"
+    },
+    {
+      "action": "ARRAY_GRID",
+      "rows": 2,
+      "cols": 4,
+      "dx": "P3",
+      "dy": "V5*1.56",
+      "start_x": "0",
+      "start_y": "-V5*0.78"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.188",
+      "height": "P4*3.2+10",
+      "z": "V7-5",
+      "y_offset": "-P4*1.6",
+      "x_offset": "P3*0",
+      "rotate_axis": "X",
+      "rotate_deg": 90
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 5,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.062",
+      "height": "V3*0.36+10",
+      "z": "V7+V3*0.60-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4*0.52"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.062",
+      "height": "V3*0.36+10",
+      "z": "V7+V3*0.60-5",
+      "x_offset": "P3*0.62",
+      "y_offset": "V4*0.52"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.062",
+      "height": "V3*0.36+10",
+      "z": "V7+V3*0.60-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "-V4*0.52"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.062",
+      "height": "V3*0.36+10",
+      "z": "V7+V3*0.60-5",
+      "x_offset": "P3*0.62",
+      "y_offset": "-V4*0.52"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.085",
+      "height": "V2+P4*2+10",
+      "z": "V7+V3*0.55",
+      "y_offset": "V4*0.50",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "x_offset": "-P4"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.085",
+      "height": "V2+P4*2+10",
+      "z": "V7+V3*0.55",
+      "y_offset": "-V4*0.50",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "x_offset": "-P4"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.045",
+      "height": "V2+P4*2+10",
+      "z": "V7+V3*0.28",
+      "y_offset": "V4*0.22",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "x_offset": "-P4"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.045",
+      "height": "V2+P4*2+10",
+      "z": "V7+V3*0.28",
+      "y_offset": "-V4*0.22",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "x_offset": "-P4"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6",
+      "height": "V3+V8+10",
+      "z": "V7-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4*0.42+V5*0.60"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6",
+      "height": "V3+V8+10",
+      "z": "V7-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4*0.42-V5*0.60"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6",
+      "height": "V3+V8+10",
+      "z": "V7-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "-(V4*0.42+V5*0.60)"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6",
+      "height": "V3+V8+10",
+      "z": "V7-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "-(V4*0.42-V5*0.60)"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.038",
+      "height": "P1*0.055",
+      "overlap": 3,
+      "z": "V7+V3*0.44",
+      "x_offset": "V2*0.32",
+      "y_offset": "V4+P4*0.3"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.018",
+      "height": "P1*0.055+10",
+      "z": "V7+V3*0.44-5",
+      "x_offset": "V2*0.32",
+      "y_offset": "V4+P4*0.3"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P1*0.28",
+      "width": "P1*0.18",
+      "height": "V3*0.26",
+      "origin": "corner",
+      "x_offset": "P3*1.5",
+      "y_offset": "V4",
+      "z": "V7+V3*0.12",
+      "overlap": 5
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*1.1",
+      "height": "P1*0.18+10",
+      "z": "V7+V3*0.22",
+      "x_offset": "P3*1.5+P1*0.14",
+      "y_offset": "V4+P4*0.55",
+      "rotate_axis": "X",
+      "rotate_deg": 90
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*1.1",
+      "height": "P1*0.18+10",
+      "z": "V7+V3*0.30",
+      "x_offset": "P3*1.5+P1*0.14",
+      "y_offset": "V4+P4*0.55",
+      "rotate_axis": "X",
+      "rotate_deg": 90
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P1*0.28",
+      "width": "P1*0.18",
+      "height": "V3*0.26",
+      "origin": "corner",
+      "x_offset": "P3*1.5",
+      "y_offset": "-(V4+P1*0.18)",
+      "z": "V7+V3*0.12",
+      "overlap": 5
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*1.1",
+      "height": "P1*0.18+10",
+      "z": "V7+V3*0.22",
+      "x_offset": "P3*1.5+P1*0.14",
+      "y_offset": "-(V4+P4*0.55)",
+      "rotate_axis": "X",
+      "rotate_deg": 90
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P4*1.6",
+      "width": "V4*2+P4",
+      "height": "V3*0.85",
+      "origin": "corner",
+      "x_offset": "-P4*1.6",
+      "y_offset": "-(V4+P4*0.5)",
+      "z": "V7+V3*0.08",
+      "overlap": 4
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.175",
+      "height": "P4*1.6+10",
+      "z": "V7+V3*0.02",
+      "x_offset": "-P4*1.6-5",
+      "y_offset": "0",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "note": "Crank front seal bore through timing cover"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.38",
+      "height": "P2*0.26",
+      "z": "V7+V3*0.02",
+      "x_offset": "-P4*1.6-P2*0.26",
+      "overlap": 3
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.175",
+      "height": "P2*0.26+10",
+      "z": "V7+V3*0.02-5",
+      "x_offset": "-P4*1.6-P2*0.26-5"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*0.75",
+      "height": "P2*0.26+10",
+      "z": "V7+V3*0.02-5",
+      "x_offset": "-P4*1.6-P2*0.26-5",
+      "y_offset": "P1*0.26"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 6,
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.22",
+      "height": "P2*0.24",
+      "overlap": 4,
+      "z": "V7+V3*0.68",
+      "x_offset": "-P4*1.6-P2*0.24"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.082",
+      "height": "P2*0.24+10",
+      "z": "V7+V3*0.68-5",
+      "x_offset": "-P4*1.6-P2*0.24-5"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P1*0.095",
+      "inner_radius": "P1*0.065",
+      "height": "P2*0.30",
+      "overlap": 4,
+      "z": "V7+V3*0.68+P1*0.22",
+      "x_offset": "-P4*1.6-P2*0.18"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V4*1.12",
+      "height": "P4*1.2",
+      "overlap": 4,
+      "z": "V7",
+      "x_offset": "V2+P4*0.6"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.175",
+      "height": "P4*1.2+10",
+      "z": "V7-5",
+      "x_offset": "V2+P4*0.6"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*0.85",
+      "height": "P4*1.2+10",
+      "z": "V7-5",
+      "x_offset": "V2+P4*0.6",
+      "y_offset": "P1*0.20"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 8,
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "V2",
+      "width": "V4*0.92",
+      "height": "V8",
+      "origin": "corner",
+      "x_offset": "0",
+      "y_offset": "V4*0.04",
+      "z": "V7+V3-3",
+      "overlap": 3,
+      "note": "Head Bank 1 \u2014 origin=corner aligns X with block perfectly"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V1*0.96",
+      "height": "V8*0.45+10",
+      "z": "V7+V3-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4*0.42"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.160",
+      "height": "V4*0.60+10",
+      "z": "V7+V3+V8*0.30-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4*1.05"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.140",
+      "height": "V4*0.55+10",
+      "z": "V7+V3+V8*0.25-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4*1.00+V4*0.55"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.090",
+      "height": "P1*0.180",
+      "overlap": 5,
+      "z": "V7+V3+V8*0.78",
+      "x_offset": "P3*0.50",
+      "y_offset": "V4*0.42"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.050",
+      "height": "P1*0.180+10",
+      "z": "V7+V3+V8*0.78-5",
+      "x_offset": "P3*0.50",
+      "y_offset": "V4*0.42"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.090",
+      "height": "P1*0.180",
+      "overlap": 5,
+      "z": "V7+V3+V8*0.78",
+      "x_offset": "P3*0.60",
+      "y_offset": "V4*0.30"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.050",
+      "height": "P1*0.180+10",
+      "z": "V7+V3+V8*0.78-5",
+      "x_offset": "P3*0.60",
+      "y_offset": "V4*0.30"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "V2",
+      "width": "V4*0.92",
+      "height": "V8",
+      "origin": "corner",
+      "x_offset": "0",
+      "y_offset": "-(V4*0.96)",
+      "z": "V7+V3-3",
+      "overlap": 3,
+      "note": "Head Bank 2 \u2014 same X alignment, negative Y bank"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V1*0.96",
+      "height": "V8*0.45+10",
+      "z": "V7+V3-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "-V4*0.42"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.160",
+      "height": "V4*0.60+10",
+      "z": "V7+V3+V8*0.30-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "-V4*1.05"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.140",
+      "height": "V4*0.55+10",
+      "z": "V7+V3+V8*0.25-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "-(V4*1.00+V4*0.55)"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.090",
+      "height": "P1*0.180",
+      "overlap": 5,
+      "z": "V7+V3+V8*0.78",
+      "x_offset": "P3*0.50",
+      "y_offset": "-V4*0.42"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.050",
+      "height": "P1*0.180+10",
+      "z": "V7+V3+V8*0.78-5",
+      "x_offset": "P3*0.50",
+      "y_offset": "-V4*0.42"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.090",
+      "height": "P1*0.180",
+      "overlap": 5,
+      "z": "V7+V3+V8*0.78",
+      "x_offset": "P3*0.60",
+      "y_offset": "-V4*0.30"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.050",
+      "height": "P1*0.180+10",
+      "z": "V7+V3+V8*0.78-5",
+      "x_offset": "P3*0.60",
+      "y_offset": "-V4*0.30"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "V2-P4",
+      "width": "V4*0.80",
+      "height": "V9",
+      "origin": "corner",
+      "x_offset": "P4*0.5",
+      "y_offset": "V4*0.10",
+      "z": "V7+V3+V8-3",
+      "overlap": 3,
+      "note": "Valve cover Bank 1 \u2014 sits on head top with 3mm overlap"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.068",
+      "height": "P1*0.052",
+      "overlap": 5,
+      "z": "V7+V3+V8+V9",
+      "x_offset": "V2*0.28",
+      "y_offset": "V4*0.40"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.040",
+      "height": "P1*0.052+10",
+      "z": "V7+V3+V8+V9-5",
+      "x_offset": "V2*0.28",
+      "y_offset": "V4*0.40",
+      "note": "Oil filler cap bore"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.045",
+      "height": "P1*0.035",
+      "overlap": 5,
+      "z": "V7+V3+V8+V9",
+      "x_offset": "V2*0.68",
+      "y_offset": "V4*0.40"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.024",
+      "height": "P1*0.035+10",
+      "z": "V7+V3+V8+V9-5",
+      "x_offset": "V2*0.68",
+      "y_offset": "V4*0.40",
+      "note": "PCV breather bore"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "V2-P4",
+      "width": "V4*0.80",
+      "height": "V9",
+      "origin": "corner",
+      "x_offset": "P4*0.5",
+      "y_offset": "-(V4*0.10+V4*0.80)",
+      "z": "V7+V3+V8-3",
+      "overlap": 3,
+      "note": "Valve cover Bank 2"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.068",
+      "height": "P1*0.052",
+      "overlap": 5,
+      "z": "V7+V3+V8+V9",
+      "x_offset": "V2*0.28",
+      "y_offset": "-V4*0.40"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.040",
+      "height": "P1*0.052+10",
+      "z": "V7+V3+V8+V9-5",
+      "x_offset": "V2*0.28",
+      "y_offset": "-V4*0.40"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "V2",
+      "width": "V4*0.35",
+      "height": "V8*0.65",
+      "origin": "corner",
+      "x_offset": "0",
+      "y_offset": "-V4*0.175",
+      "z": "V7+V3+V8*0.22",
+      "overlap": 4,
+      "note": "Intake plenum \u2014 sits in V-gap between both heads"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.142",
+      "height": "P1*0.108",
+      "overlap": 4,
+      "z": "V7+V3+V8*0.87",
+      "x_offset": "V2*0.50",
+      "y_offset": "0",
+      "note": "Throttle body boss"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.102",
+      "height": "P1*0.108+10",
+      "z": "V7+V3+V8*0.87-5",
+      "x_offset": "V2*0.50",
+      "y_offset": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P1*0.115",
+      "inner_radius": "P1*0.085",
+      "height": "V4*0.175",
+      "overlap": 5,
+      "z": "V7+V3+V8*0.22",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4*0.175",
+      "note": "Intake runner Bank 1 \u2014 vertical down from plenum to head port"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P1*0.115",
+      "inner_radius": "P1*0.085",
+      "height": "V4*0.175",
+      "overlap": 5,
+      "z": "V7+V3+V8*0.22",
+      "x_offset": "P3*0.5",
+      "y_offset": "-V4*0.35",
+      "note": "Intake runner Bank 2"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.036",
+      "height": "P1*0.038",
+      "overlap": 4,
+      "z": "V7+V3+V8*0.80",
+      "x_offset": "V2*0.18",
+      "y_offset": "V4*0.15"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.018",
+      "height": "P1*0.038+10",
+      "z": "V7+V3+V8*0.80-5",
+      "x_offset": "V2*0.18",
+      "y_offset": "V4*0.15"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P1*0.120",
+      "inner_radius": "P1*0.085",
+      "height": "V8*0.88",
+      "overlap": 5,
+      "z": "V7+V3",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4+V4*0.55",
+      "note": "Exhaust primary pipe Bank 1 \u2014 bolts to head outboard face"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "V2+P4",
+      "width": "P1*0.35",
+      "height": "P1*0.26",
+      "origin": "corner",
+      "x_offset": "-P4*0.5",
+      "y_offset": "V4+V4*0.62",
+      "z": "V7+V3",
+      "overlap": 4,
+      "note": "Exhaust collector box \u2014 4-into-1 merge"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "box",
+      "length": "V2-P4",
+      "width": "P1*0.15",
+      "height": "P1*0.16",
+      "origin": "corner",
+      "x_offset": "P4*0.5",
+      "y_offset": "V4+V4*0.62+P1*0.10",
+      "z": "V7+V3"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P1*0.162",
+      "inner_radius": "P1*0.122",
+      "height": "V3*0.55",
+      "overlap": 4,
+      "z": "V7+V3*0.32",
+      "x_offset": "V2+P1*0.12",
+      "y_offset": "V4+V4*0.70"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P1*0.120",
+      "inner_radius": "P1*0.085",
+      "height": "V8*0.88",
+      "overlap": 5,
+      "z": "V7+V3",
+      "x_offset": "P3*0.5",
+      "y_offset": "-(V4+V4*0.55)"
+    },
+    {
+      "action": "PATTERN_LINEAR",
+      "count": 4,
+      "dx": "P3",
+      "dy": "0",
+      "dz": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "V2+P4",
+      "width": "P1*0.35",
+      "height": "P1*0.26",
+      "origin": "corner",
+      "x_offset": "-P4*0.5",
+      "y_offset": "-(V4+V4*0.97)",
+      "z": "V7+V3",
+      "overlap": 4
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P1*0.162",
+      "inner_radius": "P1*0.122",
+      "height": "V3*0.55",
+      "overlap": 4,
+      "z": "V7+V3*0.32",
+      "x_offset": "V2+P1*0.12",
+      "y_offset": "-(V4+V4*0.70)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.036",
+      "height": "P1*0.040",
+      "overlap": 4,
+      "z": "V7+V3*0.30",
+      "x_offset": "V2*0.12",
+      "y_offset": "V4+P4*0.3"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.018",
+      "height": "P1*0.040+10",
+      "z": "V7+V3*0.30-5",
+      "x_offset": "V2*0.12",
+      "y_offset": "V4+P4*0.3",
+      "note": "Oil pressure sender"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.036",
+      "height": "P1*0.040",
+      "overlap": 4,
+      "z": "V7+V3*0.88",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4+P4*0.3"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.018",
+      "height": "P1*0.040+10",
+      "z": "V7+V3*0.88-5",
+      "x_offset": "P3*0.5",
+      "y_offset": "V4+P4*0.3",
+      "note": "Coolant temperature sender"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.042",
+      "height": "P1*0.040",
+      "overlap": 4,
+      "z": "V7+P4*1.2",
+      "x_offset": "V2+P1*0.08",
+      "y_offset": "P1*0.22"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.020",
+      "height": "P1*0.040+10",
+      "z": "V7+P4*1.2-5",
+      "x_offset": "V2+P1*0.08",
+      "y_offset": "P1*0.22"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.122",
+      "height": "P1*0.092",
+      "overlap": 5,
+      "z": "V7+V3+V8*0.88",
+      "x_offset": "-P4*0.8",
+      "y_offset": "V4*0.22"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.075",
+      "height": "P1*0.092+10",
+      "z": "V7+V3+V8*0.88-5",
+      "x_offset": "-P4*0.8",
+      "y_offset": "V4*0.22"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P1*0.090",
+      "inner_radius": "P1*0.062",
+      "height": "P2*0.28",
+      "overlap": 4,
+      "z": "V7+V3+V8*0.88+P1*0.092",
+      "x_offset": "-P4*0.8",
+      "y_offset": "V4*0.22"
+    },
+    {
+      "action": "FILLET",
+      "radius": "P4*0.28"
+    }
+  ]
+}

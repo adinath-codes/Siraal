@@ -1,0 +1,67 @@
+{
+  "Part_Name": "Turbine_Disc_LT",
+  "Description": "Forged HPT disc — 3-lobe fir-tree slots on rim, balance holes, bore",
+  "Steps": [
+    {
+      "action": "SET_VAR", "var": "V1", "expr": "P1*0.035",
+      "note": "Half-width of outer lobe"
+    },
+    {
+      "action": "SET_VAR", "var": "V2", "expr": "P1*0.055",
+      "note": "Total slot radial depth into rim"
+    },
+    {
+      "action": "SET_VAR", "var": "V3", "expr": "P1*0.022",
+      "note": "Neck half-width"
+    },
+    {
+      "action": "BASE", "shape": "cylinder",
+      "radius": "P1/2", "height": "P3", "z": "0"
+    },
+    {
+      "action": "SUBTRACT", "shape": "cylinder",
+      "radius": "P2/2", "height": "P3+10", "z": "-5",
+      "note": "Central shaft bore"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "extrude_profile",
+      "height": "P3+10",
+      "z": "-5",
+      "points": [
+        "P1/2",        "-V1",
+        "P1/2",         "V1",
+        "P1/2-V2*0.18", "V3",
+        "P1/2-V2*0.27", "P1*0.028",
+        "P1/2-V2*0.27", "-P1*0.028",
+        "P1/2-V2*0.18", "-V3",
+        "P1/2-V2*0.36", "-V3*0.85",
+        "P1/2-V2*0.36", "-P1*0.024",
+        "P1/2-V2*0.36", "-P1*0.024",
+        "P1/2-V2*0.55", "-P1*0.018",
+        "P1/2-V2*0.55",  "P1*0.018",
+        "P1/2-V2*0.36",  "P1*0.024",
+        "P1/2-V2*0.36",  "V3*0.85",
+        "P1/2-V2*0.18",  "V3"
+      ],
+      "note": "3-lobe fir-tree slot profile — wide at rim, narrows at necks"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT", "shape": "cylinder",
+      "radius": "P1*0.025", "height": "P3+10", "z": "-5",
+      "x_offset": "P1*0.35",
+      "note": "Balance hole at 70% radius"
+    },
+    {
+      "action": "PATTERN_CIRCULAR", "count": 8, "total_angle": 360
+    },
+    {
+      "action": "FILLET", "radius": "3"
+    }
+  ]
+}

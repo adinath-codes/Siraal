@@ -1,0 +1,854 @@
+{
+  "Part_Name": "Radial_Engine_9Cyl",
+  "Description": "9-cylinder air-cooled radial piston engine \u2014 fully detailed. P1=engine_OD mm  P2=cylinder_bore mm  P3=cylinder_length mm  P4=n_cylinders (use 9)",
+  "Steps": [
+    {
+      "action": "SET_VAR",
+      "var": "V1",
+      "expr": "P1/2",
+      "note": "engine outer radius"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V2",
+      "expr": "P2/2",
+      "note": "cylinder bore radius"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V3",
+      "expr": "P1*0.285",
+      "note": "crankcase outer radius"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V4",
+      "expr": "P1*0.355",
+      "note": "cylinder centre-line offset from engine axis"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V5",
+      "expr": "P2*0.60",
+      "note": "cylinder barrel outer radius (wall included)"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V6",
+      "expr": "P2*0.075",
+      "note": "cooling fin minor radius (fin tube thickness)"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V7",
+      "expr": "P3*0.28",
+      "note": "crankcase axial depth"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V8",
+      "expr": "P3*0.11",
+      "note": "front and rear cover depth"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V9",
+      "expr": "P1*0.048",
+      "note": "standard small boss radius for accessories"
+    },
+    {
+      "action": "BASE",
+      "shape": "polygon_prism",
+      "sides": "P4",
+      "radius": "V3",
+      "height": "V7",
+      "z": "0",
+      "note": "Main crankcase body \u2014 9-sided to match cylinder symmetry"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V3*1.05",
+      "height": "V7*0.14",
+      "z": "V7*0.43"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.200",
+      "height": "V7+10",
+      "z": "-5"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.058",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "P1*0.130"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.018",
+      "height": "V7*0.55+10",
+      "z": "V7*0.45-5",
+      "x_offset": "V3*0.84",
+      "note": "Cylinder-to-crankcase stud hole \u2014 template for all 9"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.011",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "V3*0.62"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V9*0.75",
+      "height": "P1*0.042",
+      "z": "V7*0.52",
+      "x_offset": "-V3*0.78",
+      "y_offset": "V3*0.52"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V9*0.40",
+      "height": "P1*0.042+10",
+      "z": "V7*0.52-5",
+      "x_offset": "-V3*0.78",
+      "y_offset": "V3*0.52"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V3",
+      "height": "V8",
+      "z": "V7"
+    },
+    {
+      "action": "ADD",
+      "shape": "frustum",
+      "radius_bottom": "P1*0.148",
+      "radius_top": "P1*0.095",
+      "height": "V8*0.85",
+      "z": "V7+V8"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.068",
+      "height": "V8*1.90+10",
+      "z": "V7-5"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.016",
+      "height": "V8+10",
+      "z": "V7-5",
+      "x_offset": "V3*0.88"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 18,
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.115",
+      "height": "P1*0.022",
+      "z": "V7+V8+V8*0.85"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.018",
+      "height": "P1*0.022+10",
+      "z": "V7+V8+V8*0.85-5",
+      "x_offset": "P1*0.088"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 6,
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V3",
+      "height": "V8*0.85",
+      "z": "-V8*0.85"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.016",
+      "height": "V8*0.85+10",
+      "z": "-V8*0.85-5",
+      "x_offset": "V3*0.88"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 18,
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V9*1.05",
+      "height": "P1*0.048",
+      "z": "-V8*0.85",
+      "x_offset": "V3*0.68",
+      "y_offset": "V3*0.42"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V9*0.60",
+      "height": "P1*0.048+10",
+      "z": "-V8*0.85-5",
+      "x_offset": "V3*0.68",
+      "y_offset": "V3*0.42"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V9*1.05",
+      "height": "P1*0.048",
+      "z": "-V8*0.85",
+      "x_offset": "V3*0.68",
+      "y_offset": "-V3*0.42"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V9*0.60",
+      "height": "P1*0.048+10",
+      "z": "-V8*0.85-5",
+      "x_offset": "V3*0.68",
+      "y_offset": "-V3*0.42"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.092",
+      "height": "P1*0.052",
+      "z": "-V8*0.85-P1*0.052"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.065",
+      "height": "P1*0.052+10",
+      "z": "-V8*0.85-P1*0.052-5"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.014",
+      "height": "P1*0.052+10",
+      "z": "-V8*0.85-P1*0.052-5",
+      "x_offset": "P1*0.076"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 6,
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V9*1.10",
+      "height": "P1*0.055",
+      "z": "-V8*0.85",
+      "x_offset": "-V3*0.65",
+      "y_offset": "-V3*0.50"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V9*0.62",
+      "height": "P1*0.055+10",
+      "z": "-V8*0.85-5",
+      "x_offset": "-V3*0.65",
+      "y_offset": "-V3*0.50"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "V3*0.52",
+      "inner_radius": "V3*0.42",
+      "height": "P1*0.022",
+      "z": "-V8*0.25"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V5",
+      "height": "P3*0.72",
+      "z": "V7+V8",
+      "x_offset": "V4",
+      "note": "Cylinder barrel template \u2014 positioned at radial offset V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V2",
+      "height": "P3*0.72+10",
+      "z": "V7+V8-5",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.02",
+      "minor_radius": "V6*0.52",
+      "z": "V7+V8 + P3*0.07",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.02",
+      "minor_radius": "V6*0.52",
+      "z": "V7+V8 + P3*0.17",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.02",
+      "minor_radius": "V6*0.52",
+      "z": "V7+V8 + P3*0.27",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.02",
+      "minor_radius": "V6*0.52",
+      "z": "V7+V8 + P3*0.37",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.02",
+      "minor_radius": "V6*0.52",
+      "z": "V7+V8 + P3*0.47",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.02",
+      "minor_radius": "V6*0.52",
+      "z": "V7+V8 + P3*0.57",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.04",
+      "minor_radius": "V6*0.65",
+      "z": "V7+V8 + P3*0.65",
+      "x_offset": "V4",
+      "note": "Wider fin near head \u2014 higher thermal load zone"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.05",
+      "minor_radius": "V6*0.68",
+      "z": "V7+V8 + P3*0.71",
+      "x_offset": "V4",
+      "note": "Widest fin at barrel/head junction"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V5*1.08",
+      "height": "P3*0.16",
+      "z": "V7+V8+P3*0.72",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cone",
+      "radius": "V5*1.06",
+      "height": "P2*0.42",
+      "z": "V7+V8+P3*0.88",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.10",
+      "minor_radius": "V6*0.78",
+      "z": "V7+V8+P3*0.76",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.09",
+      "minor_radius": "V6*0.72",
+      "z": "V7+V8+P3*0.83",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V5*1.07",
+      "minor_radius": "V6*0.62",
+      "z": "V7+V8+P3*0.89",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V2*0.94",
+      "height": "P2*0.42+P3*0.16+10",
+      "z": "V7+V8+P3*0.72-5",
+      "x_offset": "V4"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P2*0.195",
+      "height": "P2*0.24",
+      "z": "V7+V8+P3*0.82",
+      "x_offset": "V4 + V5*0.52",
+      "y_offset": "V5*0.30"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P2*0.128",
+      "height": "P2*0.24+10",
+      "z": "V7+V8+P3*0.82-5",
+      "x_offset": "V4 + V5*0.52",
+      "y_offset": "V5*0.30"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P2*0.175",
+      "height": "P2*0.22",
+      "z": "V7+V8+P3*0.82",
+      "x_offset": "V4 + V5*0.52",
+      "y_offset": "-V5*0.30"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P2*0.112",
+      "height": "P2*0.22+10",
+      "z": "V7+V8+P3*0.82-5",
+      "x_offset": "V4 + V5*0.52",
+      "y_offset": "-V5*0.30"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P2*0.096",
+      "height": "P2*0.19",
+      "z": "V7+V8+P3*0.86",
+      "x_offset": "V4 - V5*0.40",
+      "y_offset": "V5*0.52"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P2*0.058",
+      "height": "P2*0.19+10",
+      "z": "V7+V8+P3*0.86-5",
+      "x_offset": "V4 - V5*0.40",
+      "y_offset": "V5*0.52"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P2*0.096",
+      "height": "P2*0.19",
+      "z": "V7+V8+P3*0.86",
+      "x_offset": "V4 - V5*0.40",
+      "y_offset": "-V5*0.52"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P2*0.058",
+      "height": "P2*0.19+10",
+      "z": "V7+V8+P3*0.86-5",
+      "x_offset": "V4 - V5*0.40",
+      "y_offset": "-V5*0.52"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P2*0.64",
+      "width": "P2*0.50",
+      "height": "P2*0.24",
+      "z": "V7+V8+P3*0.88",
+      "x_offset": "V4 + V5*0.52",
+      "y_offset": "0"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P2*0.038",
+      "height": "P2*0.24+10",
+      "z": "V7+V8+P3*0.88-5",
+      "x_offset": "V4 + V5*0.52 + P2*0.26",
+      "y_offset": "P2*0.18"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P2*0.038",
+      "height": "P2*0.24+10",
+      "z": "V7+V8+P3*0.88-5",
+      "x_offset": "V4 + V5*0.52 + P2*0.26",
+      "y_offset": "-P2*0.18"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P2*0.060",
+      "inner_radius": "P2*0.038",
+      "height": "P3*0.84",
+      "z": "V7+V8",
+      "x_offset": "V4 + V5*0.84",
+      "y_offset": "P2*0.26"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P2*0.060",
+      "inner_radius": "P2*0.038",
+      "height": "P3*0.84",
+      "z": "V7+V8",
+      "x_offset": "V4 + V5*0.84",
+      "y_offset": "-P2*0.26"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P2*0.148",
+      "inner_radius": "P2*0.112",
+      "height": "P1*0.085",
+      "z": "V7+V8+P3*0.82 + P2*0.22",
+      "x_offset": "V4 + V5*0.52",
+      "y_offset": "-V5*0.30"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V4 + V5*0.52",
+      "minor_radius": "P2*0.115",
+      "z": "V7+V8+P3*0.82 + P2*0.22 + P1*0.085",
+      "note": "Exhaust collector ring \u2014 connects all 9 exhaust stacks"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "P2*0.136",
+      "inner_radius": "P2*0.100",
+      "height": "P3*0.84",
+      "z": "V7+V8",
+      "x_offset": "V4 + V5*0.52 + P2*0.02",
+      "y_offset": "V5*0.30"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V4 + V5*0.52",
+      "minor_radius": "P2*0.105",
+      "z": "V7+V8 + P3*0.10",
+      "note": "Intake manifold ring \u2014 distributes fuel/air to all 9 cylinders"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P2*0.062",
+      "height": "P2*0.115",
+      "z": "V7+V8+P3*0.74",
+      "x_offset": "V4",
+      "y_offset": "V5*0.95"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P2*0.030",
+      "height": "P2*0.115+10",
+      "z": "V7+V8+P3*0.74-5",
+      "x_offset": "V4",
+      "y_offset": "V5*0.95"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "V3*1.16",
+      "inner_radius": "V3*1.00",
+      "height": "V7*0.16",
+      "z": "V7+V8 - V7*0.16"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.019",
+      "height": "V7*0.16+10",
+      "z": "V7+V8-V7*0.16-5",
+      "x_offset": "V3*1.08"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 6,
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.075",
+      "height": "P1*0.062",
+      "z": "-V8*0.85-P1*0.062"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.048",
+      "height": "P1*0.062+10",
+      "z": "-V8*0.85-P1*0.062-5"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V9*0.80",
+      "height": "P1*0.038",
+      "z": "V7*0.48",
+      "x_offset": "-V3*0.80",
+      "y_offset": "V3*0.48"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V9*0.44",
+      "height": "P1*0.038+10",
+      "z": "V7*0.48-5",
+      "x_offset": "-V3*0.80",
+      "y_offset": "V3*0.48"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V9*0.68",
+      "height": "P1*0.035",
+      "z": "V7*0.30",
+      "x_offset": "V3*0.82",
+      "y_offset": "-V3*0.42"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V9*0.36",
+      "height": "P1*0.035+10",
+      "z": "V7*0.30-5",
+      "x_offset": "V3*0.82",
+      "y_offset": "-V3*0.42"
+    },
+    {
+      "action": "ADD",
+      "shape": "torus",
+      "major_radius": "V3*1.22",
+      "minor_radius": "P1*0.014",
+      "z": "V7+V8+P3*0.88",
+      "note": "Ignition harness ring \u2014 routes HT leads to all 18 spark plugs"
+    },
+    {
+      "action": "FILLET",
+      "radius": "P2*0.060",
+      "note": "Stress relief blend at all casting transitions"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "Part_Name": "Stator_Vane_Carrier",
+  "Description": "HPT stator ring with cambered vanes \u2014 P1=OD P2=wall_t P3=height P4=n_vanes",
+  "Steps": [
+    {
+      "action": "SET_VAR",
+      "var": "V1",
+      "expr": "P1/2"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V2",
+      "expr": "P1/2 - P2"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V3",
+      "expr": "P1*0.065"
+    },
+    {
+      "action": "BASE",
+      "shape": "pipe",
+      "outer_radius": "V1",
+      "inner_radius": "V2",
+      "height": "P3",
+      "z": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V1 + P2*0.4",
+      "height": "P2*0.9",
+      "z": "0"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V1 + P2*0.4",
+      "height": "P2*0.9",
+      "z": "P3 - P2*0.9"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P2*0.28",
+      "height": "P2*0.9+10",
+      "z": "-5",
+      "x_offset": "V1 + P2*0.15"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 16,
+      "total_angle": 360
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P2*0.28",
+      "height": "P2*0.9+10",
+      "z": "P3 - P2*0.9 - 5",
+      "x_offset": "V1 + P2*0.15"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 16,
+      "total_angle": 360
+    },
+    {
+      "action": "ADD",
+      "shape": "extrude_profile",
+      "height": "P3",
+      "z": "0",
+      "points": [
+        "V1",
+        "-V3*0.08",
+        "V1+V3*0.88",
+        "-V3*0.04",
+        "V1+V3*0.96",
+        "V3*0.10",
+        "V1+V3*0.88",
+        "V3*0.22",
+        "V1",
+        "V3*0.16",
+        "V2+P2*0.05",
+        "V3*0.14",
+        "V2",
+        "V3*0.06",
+        "V2+P2*0.05",
+        "-V3*0.06"
+      ]
+    },
+    {
+      "action": "HELIX_ARRAY",
+      "count": "P4",
+      "dz": "P3*0.012",
+      "da_deg": "360/P4"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V2 - P2*0.1",
+      "height": "P3+10",
+      "z": "-5"
+    },
+    {
+      "action": "FILLET",
+      "radius": "P2*0.18"
+    }
+  ]
+}

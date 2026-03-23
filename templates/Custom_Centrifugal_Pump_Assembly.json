@@ -1,0 +1,613 @@
+{
+  "Part_Name": "Centrifugal_Pump_Assembly",
+  "Description": "Complete centrifugal pump \u2014 motor + shaft + impeller + volute + flanges. P1=pump_OD mm  P2=shaft_dia mm  P3=total_height mm  P4=impeller_blades",
+  "Steps": [
+    {
+      "action": "SET_VAR",
+      "var": "V1",
+      "expr": "P1/2",
+      "note": "pump outer radius"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V2",
+      "expr": "P2/2",
+      "note": "shaft radius"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V3",
+      "expr": "P1*0.26",
+      "note": "impeller outer radius"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V4",
+      "expr": "P1*0.28",
+      "note": "volute inner radius (slightly larger than impeller)"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V5",
+      "expr": "P1*0.14",
+      "note": "motor radius"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V6",
+      "expr": "P1*0.038",
+      "note": "standard bolt hole radius for this pump size"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V7",
+      "expr": "P3*0.04",
+      "note": "base plate thickness"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V8",
+      "expr": "P1*0.048",
+      "note": "wall thickness for flanges and casings"
+    },
+    {
+      "action": "SET_VAR",
+      "var": "V9",
+      "expr": "P3*0.20",
+      "note": "volute axial height"
+    },
+    {
+      "action": "BASE",
+      "shape": "box",
+      "length": "P1*1.20",
+      "width": "P1*0.85",
+      "height": "V7",
+      "z": "0",
+      "note": "Main baseplate \u2014 ANSI pump base rail"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "box",
+      "length": "P1*0.42",
+      "width": "P1*0.16",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "-P1*0.22",
+      "y_offset": "0",
+      "note": "Left lightening channel"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "box",
+      "length": "P1*0.42",
+      "width": "P1*0.16",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "P1*0.22",
+      "y_offset": "0",
+      "note": "Right lightening channel"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "-P1*0.48",
+      "y_offset": "-P1*0.32",
+      "note": "Anchor bolt \u2014 front left"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "P1*0.48",
+      "y_offset": "-P1*0.32",
+      "note": "Anchor bolt \u2014 front right"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "-P1*0.48",
+      "y_offset": "P1*0.32",
+      "note": "Anchor bolt \u2014 rear left"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6",
+      "height": "V7+10",
+      "z": "-5",
+      "x_offset": "P1*0.48",
+      "y_offset": "P1*0.32",
+      "note": "Anchor bolt \u2014 rear right"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V5",
+      "height": "P3*0.38",
+      "z": "V7",
+      "note": "Motor outer casing body"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V5*1.08",
+      "height": "P3*0.025",
+      "z": "V7",
+      "note": "Drive-end end cap (larger diameter = bearing boss)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V5*1.04",
+      "height": "P3*0.020",
+      "z": "V7 + P3*0.38",
+      "note": "Non-drive-end end cap"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P1*0.14",
+      "width": "P1*0.10",
+      "height": "P3*0.08",
+      "z": "V7 + P3*0.16",
+      "x_offset": "-V5 - P1*0.07",
+      "note": "Terminal / junction box (conduit entries)"
+    },
+    {
+      "action": "ADD",
+      "shape": "box",
+      "length": "P3*0.38",
+      "width": "P1*0.014",
+      "height": "P1*0.014",
+      "z": "V7",
+      "x_offset": "V5*0.96",
+      "note": "One cooling fin rib on motor surface"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 12,
+      "total_angle": 360,
+      "note": "12 longitudinal cooling fins around motor"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.028",
+      "height": "P1*0.10+10",
+      "z": "V7 + P3*0.18",
+      "x_offset": "-V5 - P1*0.14",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "note": "Power conduit entry hole"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.018",
+      "height": "P1*0.10+10",
+      "z": "V7 + P3*0.22",
+      "x_offset": "-V5 - P1*0.14",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "note": "Control conduit entry hole"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V5*0.68",
+      "height": "P3*0.35",
+      "z": "V7 + P3*0.025",
+      "note": "Motor stator bore (rotor air gap cavity)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V5*0.62",
+      "height": "P3*0.08",
+      "z": "V7 + P3*0.38",
+      "note": "Bearing housing outer shell"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V5*0.72",
+      "height": "P3*0.018",
+      "z": "V7 + P3*0.38",
+      "note": "Bearing housing retention flange"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V5*0.28",
+      "height": "P3*0.08+10",
+      "z": "V7 + P3*0.38 - 5",
+      "note": "Bearing inner race bore"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.025",
+      "height": "P1*0.04",
+      "z": "V7 + P3*0.42",
+      "x_offset": "V5*0.50",
+      "note": "Grease nipple boss (bearing lubrication point)"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.010",
+      "height": "P1*0.04+10",
+      "z": "V7 + P3*0.42 - 5",
+      "x_offset": "V5*0.50",
+      "note": "Grease passage bore"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "V5*0.40",
+      "inner_radius": "V2*1.35",
+      "height": "P3*0.07",
+      "z": "V7 + P3*0.46",
+      "note": "Mechanical seal cartridge housing"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*0.65",
+      "height": "P3*0.07+10",
+      "z": "V7 + P3*0.46 - 5",
+      "x_offset": "V5*0.34",
+      "note": "One seal gland stud hole"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 4,
+      "total_angle": 360,
+      "note": "4 seal gland stud holes"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.030",
+      "height": "P1*0.055",
+      "z": "V7 + P3*0.48",
+      "x_offset": "-V5*0.42",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "note": "Seal flush / quench port boss"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.016",
+      "height": "P1*0.055+10",
+      "z": "V7 + P3*0.48 - 5",
+      "x_offset": "-V5*0.48",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "note": "Flush port bore"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V2",
+      "height": "P3*0.80",
+      "z": "V7",
+      "note": "Main shaft (full length through motor + pump)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V2*0.82",
+      "height": "P3*0.08",
+      "z": "V7 + P3*0.72",
+      "note": "Shaft step \u2014 impeller seating journal"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "box",
+      "length": "P3*0.06",
+      "width": "V2*0.55",
+      "height": "V2*0.28",
+      "z": "V7 + P3*0.72",
+      "y_offset": "V2*0.65",
+      "note": "Impeller keyway slot (DIN 6885)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V3",
+      "height": "P3*0.055",
+      "z": "V7 + P3*0.74",
+      "note": "Impeller back shroud disc"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V3",
+      "height": "P3*0.008",
+      "z": "V7 + P3*0.74 + P3*0.055 - P3*0.008",
+      "note": "Impeller front shroud disc (thin, close to back)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V2*1.55",
+      "height": "P3*0.055",
+      "z": "V7 + P3*0.74",
+      "note": "Impeller hub (thicker section at bore)"
+    },
+    {
+      "action": "ADD",
+      "shape": "extrude_profile",
+      "height": "P3*0.042",
+      "z": "V7 + P3*0.743",
+      "points": [
+        "V2*1.6",
+        "-V3*0.055",
+        "V3*0.60",
+        "-V3*0.095",
+        "V3*0.88",
+        "-V3*0.038",
+        "V3*0.98",
+        "V3*0.028",
+        "V3*0.88",
+        "V3*0.068",
+        "V3*0.60",
+        "V3*0.022",
+        "V2*1.6",
+        "V3*0.040"
+      ],
+      "note": "One backward-curved blade \u2014 wider at hub, sweeps backward to rim"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": "P4",
+      "total_angle": 360,
+      "note": "All N impeller blades in circular pattern"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V2*0.82",
+      "height": "P3*0.055+10",
+      "z": "V7 + P3*0.74 - 5",
+      "note": "Impeller shaft bore"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "V1",
+      "inner_radius": "V4",
+      "height": "V9",
+      "z": "V7 + P3*0.53",
+      "note": "Volute outer casing ring \u2014 contains the spiral flow passage"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V1",
+      "height": "V8",
+      "z": "V7 + P3*0.53 + V9",
+      "note": "Volute back plate (drive-end face)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V1",
+      "height": "V8",
+      "z": "V7 + P3*0.53 - V8",
+      "note": "Volute front plate (suction-end face)"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V4*0.76",
+      "height": "V8+10",
+      "z": "V7 + P3*0.53 - V8 - 5",
+      "note": "Suction eye (large bore \u2014 fluid enters here)"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V5*0.42",
+      "height": "V8+10",
+      "z": "V7 + P3*0.53 + V9 - 5",
+      "note": "Casing back plate shaft clearance bore"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*0.80",
+      "height": "V9+10",
+      "z": "V7 + P3*0.53 - 5",
+      "x_offset": "V1*0.88",
+      "note": "One casing split-flange stud hole"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 12,
+      "total_angle": 360,
+      "note": "12 casing split-flange studs"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "pipe",
+      "outer_radius": "V4*0.77",
+      "inner_radius": "V4*0.72",
+      "height": "V8*0.6",
+      "z": "V7 + P3*0.53 - V8*0.35",
+      "note": "Front wear ring groove (replaceable wear surface)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V4*0.52",
+      "height": "P1*0.48",
+      "z": "V7 + P3*0.53 + V9*0.50",
+      "x_offset": "V1",
+      "y_offset": "0",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "note": "Discharge nozzle barrel (tangential exit)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V4*0.72",
+      "height": "V8*1.4",
+      "z": "V7 + P3*0.53 + V9*0.50",
+      "x_offset": "V1 + P1*0.48",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "note": "Discharge raised-face flange"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V4*0.42",
+      "height": "P1*0.48 + V8*1.4 + 10",
+      "z": "V7 + P3*0.53 + V9*0.50",
+      "x_offset": "V1 - 5",
+      "y_offset": "0",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "note": "Discharge bore through nozzle and flange"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*0.75",
+      "height": "V8*1.4+10",
+      "z": "V7 + P3*0.53 + V9*0.50",
+      "x_offset": "V1 + P1*0.48 + V8",
+      "y_offset": "V4*0.58",
+      "rotate_axis": "Y",
+      "rotate_deg": 90,
+      "note": "One discharge flange bolt hole"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 8,
+      "total_angle": 360,
+      "note": "8 discharge flange bolts (PN16 standard pattern)"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V4*0.88",
+      "height": "P1*0.18",
+      "z": "V7 + P3*0.53 - V8 - P1*0.18",
+      "note": "Suction nozzle short barrel"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "V1*0.82",
+      "height": "V8*1.6",
+      "z": "V7 + P3*0.53 - V8 - P1*0.18 - V8*1.6",
+      "note": "Suction raised-face flange"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V4*0.76",
+      "height": "P1*0.18 + V8*1.6 + 10",
+      "z": "V7 + P3*0.53 - V8 - P1*0.18 - V8*1.6 - 5",
+      "note": "Suction bore (same ID as volute suction eye)"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "V6*0.80",
+      "height": "V8*1.6+10",
+      "z": "V7 + P3*0.53 - V8 - P1*0.18 - V8*1.6 - 5",
+      "x_offset": "V1*0.68",
+      "note": "One suction flange bolt hole"
+    },
+    {
+      "action": "PATTERN_CIRCULAR",
+      "count": 8,
+      "total_angle": 360,
+      "note": "8 suction flange bolts"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.028",
+      "height": "P1*0.05",
+      "z": "V7 + P3*0.53 + V9*0.18",
+      "y_offset": "-V1*0.96",
+      "note": "Casing drain boss (NPT threaded)"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.015",
+      "height": "P1*0.05+10",
+      "z": "V7 + P3*0.53 + V9*0.18 - 5",
+      "y_offset": "-V1*0.96",
+      "note": "Drain bore"
+    },
+    {
+      "action": "ADD",
+      "shape": "cylinder",
+      "radius": "P1*0.022",
+      "height": "P1*0.04",
+      "z": "V7 + P3*0.53 + V9*0.75",
+      "y_offset": "V1*0.92",
+      "note": "Pressure tapping boss (instrument connection)"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "cylinder",
+      "radius": "P1*0.010",
+      "height": "P1*0.04+10",
+      "z": "V7 + P3*0.53 + V9*0.75 - 5",
+      "y_offset": "V1*0.92",
+      "note": "Pressure tapping bore"
+    },
+    {
+      "action": "ADD",
+      "shape": "pipe",
+      "outer_radius": "V5*0.74",
+      "inner_radius": "V5*0.66",
+      "height": "P3*0.10",
+      "z": "V7 + P3*0.38",
+      "note": "Coupling guard outer shell (thin wall safety cover)"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "box",
+      "length": "P1*0.020",
+      "width": "P1*0.12",
+      "height": "P3*0.06",
+      "z": "V7 + P3*0.40",
+      "x_offset": "V5*0.70",
+      "note": "Guard inspection slot \u2014 allows visual coupling check"
+    },
+    {
+      "action": "SUBTRACT",
+      "shape": "box",
+      "length": "P1*0.020",
+      "width": "P1*0.12",
+      "height": "P3*0.06",
+      "z": "V7 + P3*0.40",
+      "x_offset": "-V5*0.70",
+      "note": "Guard inspection slot \u2014 opposite side"
+    },
+    {
+      "action": "FILLET",
+      "radius": "P1*0.012",
+      "note": "Blend all sharp transitions throughout assembly"
+    }
+  ]
+}
