@@ -1,4 +1,4 @@
-# ⚙️ Siraal (🏆 WINNING ENTERPRISE PROJECT)
+# ⚙️ Siraal: Your AUTOCAD assitant
 
 **The Deterministic AI-to-CAD Manufacturing Engine.**
 
@@ -103,7 +103,7 @@ Siraal requires a Python environment capable of communicating with Windows COM o
 
 ```bash
 # Navigate to backend
-cd siraal-core
+cd siraal
 
 # Create & Activate Virtual Environment
 python -m venv .venv
@@ -113,21 +113,15 @@ python -m venv .venv
 cd apis
 pip install -r requirements.txt
 
+#Setting up the environemnetal variables
+## for windows:
+set METALPRICE_API_KEY=<YOUR API KEY>
+set GEMINI_API_KEY=<YOUR API KEY> 
+## or mac/linux:
+export METALPRICE_API_KEY=<YOUR API KEY>
+export GEMINI_API_KEY=<YOUR API KEY> 
+
 # Running the Headless Engine
 python main.py
 ```
 
-### 3\. Environment Setup (Frontend)
-
-Siraal requires the ReactJS + Vite frontend dashboard to interact with the backend engine.
-
-```bash
-# Open a new terminal and navigate to frontend
-cd siraal-ui
-
-# Install Dependencies (Tailwind, React Three Fiber, Axios)
-npm install
-
-# Running the Dashboard
-npm run dev
-```
