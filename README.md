@@ -125,17 +125,3 @@ export GEMINI_API_KEY=<YOUR API KEY>
 python main.py
 ```
 
-### 3\. Environment Setup (Frontend)
-
-Siraal requires the ReactJS + Vite frontend dashboard to interact with the backend engine.
-
-```bash
-# Open a new terminal and navigate to frontend
-cd siraal-ui
-
-# Install Dependencies (Tailwind, React Three Fiber, Axios)
-npm install
-
-# Running the Dashboard
-npm run dev
-```
