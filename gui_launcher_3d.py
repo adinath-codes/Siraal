@@ -23,7 +23,6 @@ try:
     PIL_OK = True
 except ImportError:
     PIL_OK = False
-
 # ── Optional runtime deps ─────────────────────────────────────────────────
 try:    import pandas as pd;          PANDAS_OK  = True
 except: PANDAS_OK  = False
@@ -33,9 +32,8 @@ try:
     from watchdog.observers import Observer
     from watchdog.events    import FileSystemEventHandler
     WATCHDOG_OK = True
-except: WATCHDOG_OK = False
-
-
+except: 
+    WATCHDOG_OK=False
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # ①  DESIGN TOKENS
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -230,8 +228,6 @@ def _log_widget(parent):
                     ("info",BLUE),("head",YELLOW),("ai",PURPLE),("cost",_blend(PURPLE,0.85))]:
         txt.tag_config(tag, foreground=col)
     return outer, txt
-
-
 def _append_log(txt, msg, tag=""):
     txt.configure(state="normal")
     ts   = datetime.datetime.now().strftime("%H:%M:%S")
@@ -256,8 +252,6 @@ def _pill_btn(parent, text, cmd, color, width=None, height=34):
               corner_radius=9, command=cmd)
     if width: kw["width"] = width
     return ctk.CTkButton(parent, text=text, **kw)
-
-
 def _run_btn(parent, text, cmd, color, height=42):
     return ctk.CTkButton(parent, text=text, height=height,
                          fg_color=color, hover_color=_blend(color,0.80),
