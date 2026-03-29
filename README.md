@@ -1,4 +1,4 @@
-# ⚙️ Siraal (🏆 WINNING ENTERPRISE PROJECT)
+# ⚙️ Siraal: Your AUTOCAD assitant
 
 **The Deterministic AI-to-CAD Manufacturing Engine.**
 
