@@ -4,11 +4,22 @@
 
 Siraal is an enterprise-grade automation platform that bridges the gap between business data, Large Language Models, and deterministic CAD software. It enables mechanical engineers and procurement teams to generate complex 3D geometry from Excel BOMs or natural language, validate it against strict factory rules, and run real-time cost and ESG audits before the metal is ever purchased.
 
-## 🌄 Demo
+## 🌄 APP DEMO
+**FULL DEMO VIDEOS**:
+https://drive.google.com/file/d/16tRVIIonR_pIUBL50XCIIGI54h4Izpdr/view?usp=sharing
 
-[](https://www.google.com/search?q=%5BYOUR_LINKEDIN_LINK_HERE%5D\(https://www.linkedin.com/\)) [](https://www.google.com/search?q=%5BYOUR_YOUTUBE_VIDEO_LINK_HERE%5D\(https://www.youtube.com/\))
+<img width="1919" height="1010" alt="Screenshot 2026-03-29 184759" src="https://github.com/user-attachments/assets/9569e144-5be2-4966-b7b0-82f9cc0038d6" />
+<img width="1916" height="1025" alt="Screenshot 2026-03-29 184752" src="https://github.com/user-attachments/assets/9ed4db89-d1e5-4296-a3a3-47db49e8fb5e" />
+<img width="1919" height="1018" alt="Screenshot 2026-03-29 184744" src="https://github.com/user-attachments/assets/f5e97b28-87a6-463a-b548-584f35b34e8c" />
+<img width="1919" height="1010" alt="Screenshot 2026-03-29 184716" src="https://github.com/user-attachments/assets/f18b9503-c97a-47b8-83db-1b5a23225098" />
+<img width="1919" height="1016" alt="Screenshot 2026-03-29 184703" src="https://github.com/user-attachments/assets/94e8f321-537d-4366-b5fa-a159f493de77" />
+<img width="1919" height="1024" alt="Screenshot 2026-03-29 184807" src="https://github.com/user-attachments/assets/45292d2c-9fc2-45fb-9832-76af07d38e28" />
 
-*(Note: Replace placeholder image links with your actual Siraal UI screenshots)*
+## 🌄 RESULTS SAMPLE
+<img width="748" height="511" alt="Screenshot 2026-03-21 200240" src="https://github.com/user-attachments/assets/6978b483-de25-4806-bd53-5223a3654f61" />
+<img width="998" height="616" alt="Screenshot 2026-03-14 065044" src="https://github.com/user-attachments/assets/9e5d0806-98d4-41f3-89d6-9e9ddcc63249" />
+<img width="903" height="472" alt="Screenshot 2026-03-13 091107" src="https://github.com/user-attachments/assets/74751893-4a30-4706-97c4-a1761faeb2e2" />
+<img width="1919" height="747" alt="Screenshot 2026-03-12 100840" src="https://github.com/user-attachments/assets/4e54d491-0dee-48d2-8bfa-ca605c1d7045" />
 
 -----
 
@@ -24,13 +35,6 @@ Siraal is an enterprise-grade automation platform that bridges the gap between b
 -----
 
 ## 🛠️ Tech Stack
-
-### Frontend
-
-  * **ReactJS** + **Vite**: High-performance, modern UI rendering.
-  * **Tailwind CSS**: For enterprise-grade, glassmorphism-inspired styling and dashboards.
-  * **React Three Fiber (Three.js):** For lightweight, web-based 3D previews of the JSON CSG models.
-  * **Axios**: For asynchronous API communication with the local CAD engine.
 
 ### Backend & Manufacturing Infrastructure
 
@@ -50,7 +54,6 @@ Follow these steps to run Siraal locally on your machine.
   * **OS:** Windows 10 or Windows 11 (Mandatory for AutoCAD COM interface compatibility).
   * **CAD Software:** Autodesk AutoCAD installed and licensed on the host machine.
   * **Python:** Version 3.10 or higher.
-  * **Node.js:** Version 18+.
 
 ### 1\. Clone the Repository
 
@@ -58,19 +61,16 @@ Follow these steps to run Siraal locally on your machine.
 git clone https://github.com/yourusername/siraal-engine.git
 cd siraal-engine
 ```
+**HOW TO RUN**:
+INSTALL AUTOCAD first
+1) https://drive.google.com/file/d/1WT5WqvbVaZNYHPzeh439sUWJqf2F2jaM/view?usp=sharing
 
 ## 📂 Project Structure
 
 Here is an overview of the repository's architecture:
 
 ```text
-siraal-engine/
-├── siraal-ui/               # 🎨 Frontend Source Code (React + Vite)
-│   ├── src/                 # React components, Dashboards, and 3D Web Viewer
-│   ├── public/              # Static assets and icons
-│   └── package.json         # Frontend dependencies (Tailwind, Three.js, etc.)
-│
-├── siraal-core/             # 🧠 Backend & CAD Infrastructure (Python)
+├── siraal/             # 🧠 Backend & CAD Infrastructure (Python)
 │   ├── apis/                # Main FastAPI Application
 │   │   ├── main.py          # API Gateway & Logic Orchestrator
 │   │   ├── cad_driver.py    # Bridge to AutoCAD COM Interface (Critical)
