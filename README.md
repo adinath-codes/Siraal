@@ -103,7 +103,7 @@ Siraal requires a Python environment capable of communicating with Windows COM o
 
 ```bash
 # Navigate to backend
-cd siraal-core
+cd siraal
 
 # Create & Activate Virtual Environment
 python -m venv .venv
@@ -112,6 +112,14 @@ python -m venv .venv
 # Install Dependencies (FastAPI, pywin32, etc.)
 cd apis
 pip install -r requirements.txt
+
+#Setting up the environemnetal variables
+for windows:
+set METALPRICE_API_KEY=<YOUR API KEY>
+set GEMINI_API_KEY=<YOUR API KEY> 
+for mac/linux:
+export METALPRICE_API_KEY=<YOUR API KEY>
+export GEMINI_API_KEY=<YOUR API KEY> 
 
 # Running the Headless Engine
 python main.py
